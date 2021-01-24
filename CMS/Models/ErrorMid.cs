@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 
 public class ErrorMid
 {
+    private static readonly Serilog.ILogger _logger = Log.ForContext<ErrorMid>();
     private readonly RequestDelegate next;
 
     public ErrorMid(RequestDelegate next)
@@ -25,10 +28,12 @@ public class ErrorMid
         }
         catch (HttpStatusCodeException ex)
         {
+            _logger.Error($"{DateTime.Now.ToString("HH:mm:ss")} : {ex}");
             await HandleExceptionAsync(context, ex);
         }
         catch (Exception exceptionObj)
         {
+            _logger.Error($"{DateTime.Now.ToString("HH:mm:ss")} : {exceptionObj}");
             await HandleExceptionAsync(context, exceptionObj);
         }
     }
