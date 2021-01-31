@@ -15,7 +15,6 @@
 
 
 
-
 }
 
 <!--begin::Content-->
@@ -30,7 +29,7 @@
             <!--begin::Action-->
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
             <span class="text-muted font-weight-bold mr-4">Sayfa Bilgisi</span>
-            <a href="#" class="btn btn-light-primary font-weight-bolder btn-sm">Yeni Kayıt</a>
+            <a href="/@Html.Raw("Workshop")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">Yeni Kayıt</a>
             <!--end::Action-->
         </div>
         <!--end::Info-->
@@ -132,7 +131,7 @@
             <div class="card-header card-header-tabs-line nav-tabs-line-3x">
                 <div class="card-toolbar">
                     <ul class="tabbar nav nav-tabs nav-bold nav-tabs-line nav-tabs-line-3x">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab1">@Html.Raw(EnumText + " " + (postModel.Id > 0 ? "Güncelleme" : "Ekleme"))</a></li>
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab1">@Html.Raw(EnumText + " " + (postModel.Id > 0 ? "Update" : "Insert"))</a></li>
                     </ul>
                 </div>
                 @*<div class="card-title"><h3 class="card-label">Title</h3></div>*@
@@ -152,7 +151,7 @@
                        colClass = "col-md-6",
                        nonProp = disabled,
                        orderby = "Name",
-                       addBtn = "<input type='submit' value='" + "Kaydet" + "' " + "class='btn btn-primary btn-shadow-hover font-weight-bold mr-2' />",
+                       addBtn = "<input type='submit' value='" + "Save" + "' " + "class='btn btn-primary btn-shadow-hover font-weight-bold mr-2' />",
                        removeBtn = $"<input dataid='{postModel.Id}' type='button' value='Delete' class='btnDelete btn btn-danger btn-shadow-hover font-weight-bold mr-2' />",
 
                    })

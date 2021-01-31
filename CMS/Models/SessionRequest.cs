@@ -22,7 +22,7 @@ public static class SessionRequest
 
     public static string Title = "WIP";
     public static string StartPage = "Base";
-    public static string StartAction = "Index";
+    public static string StartAction = "Login1";
     public static string version = DateTime.Now.ToString().Replace("-", "").Replace(":", "").Replace(".", "").Replace(" ", "");
     public static string copyright = $"{DateTime.Now.Year} © Yazılım&Tasarım (Software&Design)  <a target='_blank' href='#'> by Hybrid</a>";
     public static string layoutID = "4";
@@ -39,7 +39,8 @@ public static class SessionRequest
     {
         get
         {
-            return _IHttpContextAccessor.HttpContext.Session.Get<User>("_user") ?? new User() { Id = 1, CreaUser = 1, CreaDate = DateTime.Now, UserName = "admin", Name = "Admin", Surname = "Admin" };
+            return _IHttpContextAccessor.HttpContext.Session.Get<User>("_user");
+                //?? new User() { Id = 1, CreaUser = 1, CreaDate = DateTime.Now, UserName = "admin", Name = "Admin", Surname = "Admin" };
         }
         set { }
     }

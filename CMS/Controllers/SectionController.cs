@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.Controllers
 {
-    public class WorkshopController : Controller
+    public class SectionController : Controller
     {
         IHostingEnvironment _IHostingEnvironment;
         IHttpContextAccessor _IHttpContextAccessor;
@@ -21,7 +21,7 @@ namespace CMS.Controllers
         IDocumentsService _IDocumentsService;
         IUserService _IUserService;
 
-        public WorkshopController(
+        public SectionController(
             IHostingEnvironment _IHostingEnvironment,
             IHttpContextAccessor _IHttpContextAccessor,
             IUnitOfWork<myDBContext> _uow,
@@ -46,42 +46,62 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
+        [HttpPost]
+        public IActionResult UpdateOrder(List<OrderUpdateModel> postModel)
+        {
+            var rows = _ISectionService.Where(o => o.WorkshopId == postModel.FirstOrDefault().dataid).Result.ToList();
+            postModel.ForEach(o =>
+            {
+                var row = rows.FirstOrDefault(r => r.Id == o.Id);
+                if (row != null)
+                {
+                    row.OrderNo = o.OrderNo;
+                    _ISectionService.Update(row);
+                }
+            });
+            _uow.SaveChanges();
+            return Json("ok");
+        }
+
 
         [HttpPost]
-        public IActionResult GetPaging(DTParameters<Workshop> param, Workshop searchModel)
+        public IActionResult GetPaging(DTParameters<Section> param, Section searchModel)
         {
-            var result = _IWorkshopService.GetPaging(null, true, param, false, o => o.Section);
+            var result = _ISectionService.GetPaging(null, true, param, false, o => o.Workshop);
             return Json(result);
         }
         public IActionResult GetAll()
         {
-            var result = _IWorkshopService.Where(null, true, false, o => o.Section);
+            var result = _ISectionService.Where(null, true, false, o => o.Workshop);
             return Json(result);
-        }
-        public IActionResult getCategoryType()
-        {
-            var list = Enum.GetValues(typeof(CategoryType)).Cast<int>().Select(x => new { name = ((CategoryType)x).ToStr(), value = x.ToString(), text = ((CategoryType)x).ExGetDescription() }).ToArray();
-            return Json(list);
         }
         public IActionResult GetSelect()
         {
-            var result = _IWorkshopService.Where().Result.Select(o => new TextValue { value = o.Id, text = o.Name }).ToArray();
+            var result = _ISectionService.Where().Result.Select(o => new TextValue { value = o.Id, text = o.Name }).ToArray();
             return Json(result);
         }
-        public RModel<Workshop> Get(int id)
+        public RModel<Section> Get(int id)
         {
-            var result = _IWorkshopService.Where(o => o.Id == id, true, false, o => o.Section);
+            var result = _ISectionService.Where(o => o.Id == id, true, false, o => o.Workshop);
             return (result);
         }
         public IActionResult Delete(int id)
         {
-            var deleteRow = _IWorkshopService.Delete(id);
+            var deleteRow = _ISectionService.Delete(id);
             var delete = _uow.SaveChanges();
             return Json(delete);
         }
-        public IActionResult InsertOrUpdate(Workshop postModel)
+        public IActionResult InsertOrUpdate(Section postModel)
         {
-            var result = _IWorkshopService.InsertOrUpdate(postModel);
+            var list = _ISectionService.Where(o => o.WorkshopId == postModel.WorkshopId).Result.ToList();
+            var i = 0;
+
+            list.ForEach(o => { i++; o.OrderNo = i; _ISectionService.Update(o); });
+            var saves = _uow.SaveChanges();
+
+            var lastRow = _ISectionService.Where(o => o.WorkshopId == postModel.WorkshopId).Result.OrderByDescending(o => o.Id).FirstOrDefault();
+            if (lastRow != null) postModel.OrderNo = lastRow.OrderNo + 1; else postModel.OrderNo = 0;
+            var result = _ISectionService.InsertOrUpdate(postModel);
             if (result.RType == RType.OK)
             {
                 var save = _uow.SaveChanges();
@@ -91,7 +111,7 @@ namespace CMS.Controllers
         }
         public IActionResult Index()
         {
-            ViewBag.pageTitle = "Workshop";
+            ViewBag.pageTitle = "Section";
             return View();
         }
         public IActionResult InsertOrUpdatePage()

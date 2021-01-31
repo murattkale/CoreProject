@@ -119,6 +119,8 @@ namespace CMS
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseAuthenticationMiddleware();
+
             app.UseMiddleware<ErrorMid>();
 
             //app.InitializeDatabase();
@@ -135,17 +137,17 @@ namespace CMS
                 SupportedUICultures = supportedCultures
             });
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Base}/{action=Index}/{id?}");
-            });
-
-            //app.UseMvc(routes =>
+            //app.UseEndpoints(endpoints =>
             //{
-            //    routes.MapRoute(name: "default", template: "{controller=Base}/{action=Index}/{Id?}");
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=" + SessionRequest.StartPage + "}/{action=" + SessionRequest.StartAction + "}/{id?}");
             //});
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(name: "default", template: "{controller=" + SessionRequest.StartPage + "}/{action=" + SessionRequest.StartAction + "}/{Id?}");
+            });
         }
     }
 }

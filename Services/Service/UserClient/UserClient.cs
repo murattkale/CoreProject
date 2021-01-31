@@ -6,22 +6,20 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-public partial class User : BaseModel
+public partial class UserClient : BaseModel
 {
-    public User()
+    public UserClient()
     {
+        UserClientSession = new HashSet<UserClientSession>();
     }
 
 
-    public string UserName { get; set; }
-    public string Pass { get; set; }
 
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Mail { get; set; }
     public string Phone { get; set; }
-    public int? LoginCount { get; set; }
 
-
+    public virtual ICollection<UserClientSession> UserClientSession { get; set; }
 }
 

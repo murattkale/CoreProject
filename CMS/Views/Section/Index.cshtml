@@ -6,16 +6,16 @@
             <!--begin::Header-->
             <div class="card-header border-0 py-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label font-weight-bolder text-dark">Workshop</span>
+                    <span class="card-label font-weight-bolder text-dark">Section</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="/@Html.Raw("Workshop")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">New Record</a>
+                    <a href="/@Html.Raw("Section")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">New Record</a>
                 </div>
             </div>
             <!--end::Header-->
             <div class="card-body py-0">
                 <div class="table-responsive">
-                    <table id="dt_Workshop" class="table table-bordered table-hover table-checkable">
+                    <table id="dt_Section" class="table table-bordered table-hover table-checkable">
                         <thead>
                             <tr>
                             </tr>
@@ -30,6 +30,7 @@
 
 
 
+
 <script>
 
     $(function () {
@@ -39,23 +40,26 @@
         function getGrid() {
             var columns = [];
             columns.push({ "data": "Id", text: "ID" });
+            columns.push({ "data": "WorkshopId", text: "WorkshopId" });
+            columns.push({ "data": "OrderNo", text: "OrderNo" });
             columns.push({ "data": "Name", text: "Name" });
             columns.push({ "data": "Definition", text: "Definition" });
+            columns.push({ "data": "WorkName", text: "WorkName" });
 
 
             columns.push({ "data": "Detail", text: "Detail" });
 
             $.each(columns, function (i, item) {
-                $('#dt_Workshop' + ' thead tr').append('<td>' + item.text + '</td>');
+                $('#dt_Section' + ' thead tr').append('<td>' + item.text + '</td>');
             });
 
-            var table = $('#dt_Workshop').DataTable({
+            var table = $('#dt_Section').DataTable({
                 "ajax": {
-                    "url": '/Workshop/GetPaging',
+                    "url": '/Section/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
-                        $('#dt_Workshop').LoadingOverlay("show");
+                        //$('#dt_Section').LoadingOverlay("show");
 
 
                     },
@@ -64,16 +68,20 @@
                         var data = json.data;
 
                         $.each(data, function (i, row) {
-                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Workshop/InsertOrUpdatePage?id=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Section/InsertOrUpdatePage?id=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
                             return_data.push({
                                 'Id': row.Id,
+                                'WorkshopId': row.WorkshopId,
+                                'OrderNo': row.OrderNo,
                                 'Name': row.Name,
                                 'Definition': row.Definition,
+                                'WorkName': row.Workshop?.Name,
+
                                 'Detail': detail,
                             });
 
                         });
-                        $('#dt_Workshop').LoadingOverlay("hide");
+                        $('#dt_Section').LoadingOverlay("hide");
                         return return_data;
                     }
                 },
@@ -103,6 +111,9 @@
 
                     $(table).LoadingOverlay("hide");
                     ayarlar();
+
+
+
                 },
                 //"language": {
                 //    "url": "/content/json/Turkish.json",
@@ -118,7 +129,11 @@
                 "lengthMenu": [[10, 25, 100, 1000, 2500, 5000], [10, 25, 100, 1000, 2500, 5000]],
                 "lengthChange": true,
                 "processing": true,
-                "order": [[0, "desc"]],
+                "order": [[2, "asc"]],
+                'rowReorder': {
+                    'selector': 'tr',
+                    //'dataSrc': 'seq', // follow the json data
+                },
                 //"columnDefs": [
                 //    { "orderable": true, "targets": [1] },
                 //],
@@ -126,6 +141,35 @@
 
             });
 
+
+            table.on('row-reorder.dt', function (dragEvent, diff, nodes) {
+
+                var myArray = [];
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    var rowData = table.row(diff[i].node).data();
+                    myArray.push({
+                        id: rowData.Id,
+                        dataid: rowData.WorkshopId,
+                        OrderNo: diff[i].newPosition
+                    });
+                }
+                debugger;
+
+                $.ajx('/Section/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+
+                //for (var i = 0, ien = data.length; i < ien; i++) {
+                //    var rowData = table.row(data[i].node).data();
+                //    var direction = "";
+                //    if (data[i].newPosition < data[i].oldPosition)
+                //        direction = "back";
+                //    else {
+                //        direction = "forward";
+                //    }
+                //    debugger;
+                //    var diff = data[i];
+
+                //}
+            });
 
 
 

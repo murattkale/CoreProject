@@ -1,11 +1,11 @@
 ﻿@{
-    var postModel = ViewBag.edit as User;
-    var EnumText = "User";
+    var postModel = ViewBag.edit as Section;
+    var EnumText = "Section";
     var disabled = "";
 
     if (postModel == null)
     {
-        postModel = new User();
+        postModel = new Section();
     }
     else
     {
@@ -29,7 +29,7 @@
             <!--begin::Action-->
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
             <span class="text-muted font-weight-bold mr-4">Sayfa Bilgisi</span>
-            <a href="/@Html.Raw("User")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">Yeni Kayıt</a>
+            <a href="/@Html.Raw("Section")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">Yeni Kayıt</a>
             <!--end::Action-->
         </div>
         <!--end::Info-->
@@ -143,20 +143,20 @@
                    {
                        model = postModel,
                        controllerName = postModel.GetType().Name,
-                       PageType = "User",
+                       PageType = "Section",
                        titleName = TitleName,
                        InsertMethodName = "InsertOrUpdate",
                        labelClass = "col-md-4",
                        inputClass = "col-md-8",
                        colClass = "col-md-6",
                        nonProp = disabled,
-                       orderby = "",
+                       orderby = "Name",
                        addBtn = "<input type='submit' value='" + "Save" + "' " + "class='btn btn-primary btn-shadow-hover font-weight-bold mr-2' />",
-                       removeBtn = $"<input dataid='{postModel.Id}' type='button' value='Sil' class='btnDelete btn btn-danger btn-shadow-hover font-weight-bold mr-2' />",
+                       removeBtn = $"<input dataid='{postModel.Id}' type='button' value='Delete' class='btnDelete btn btn-danger btn-shadow-hover font-weight-bold mr-2' />",
 
                    })
                     </div>
-
+                  
                 </div>
             </div>
         </div>

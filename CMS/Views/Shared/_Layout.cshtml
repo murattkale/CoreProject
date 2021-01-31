@@ -57,12 +57,12 @@
     }
 
     @*<script src="@Html.Raw("https://kendo.cdn.telerik.com/2020.3.915/js/cultures/kendo.culture." + culture + ".min.js")"></script>
-    <script src="@Html.Raw("https://kendo.cdn.telerik.com/2020.3.915/js/messages/kendo.messages." + culture + ".min.js")"></script>
-    <script> 
-                    var culture = "@culture";
-                    kendo.culture(culture); // change the culture
+        <script src="@Html.Raw("https://kendo.cdn.telerik.com/2020.3.915/js/messages/kendo.messages." + culture + ".min.js")"></script>
+        <script>
+                        var culture = "@culture";
+                        kendo.culture(culture); // change the culture
 
-    </script>*@
+        </script>*@
 
     <link href="@SessionRequest.layoutUrl/assets/plugins/custom/datatables/datatables.bundle.css?v=7.1.6" rel="stylesheet" type="text/css" />
 
@@ -70,6 +70,10 @@
 
 
     @*<script src="@SessionRequest.layoutUrl/assets/js/pages/features/miscellaneous/dual-listbox.js?v=7.1.6"></script>*@
+
+
+    @*<link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js" type="text/javascript"></script>*@
 
 
     <script src="~/content/js/bootbox.min.js" type="text/javascript"></script>
@@ -178,7 +182,7 @@
                         </li>
 
                         <li class="nav-item mb-5" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Workshop">
-                            <a href="/Workshop" class="nav-link btn btn-icon btn-icon-white btn-lg">
+                            <a href="/Workshop/Index" class="nav-link btn btn-icon btn-icon-white btn-lg">
                                 <i class="flaticon2-hourglass-1 icon-lg"></i>
                             </a>
                         </li>
@@ -186,31 +190,14 @@
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mb-5" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Section">
-                            <a href="/Section" class="nav-link btn btn-icon btn-icon-white btn-lg">
+                            <a href="/Section/Index" class="nav-link btn btn-icon btn-icon-white btn-lg">
                                 <i class="flaticon2-list-3 icon-lg"></i>
                             </a>
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <li class="nav-item mb-5" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Content">
-                            <a href="/Content" class="nav-link btn btn-icon btn-icon-white btn-lg">
-                                <i class="flaticon2-calendar-6 icon-lg"></i>
-                            </a>
-                        </li>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <li class="nav-item mb-5" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Action">
-                            <a href="/Action" class="nav-link btn btn-icon btn-icon-white btn-lg">
-                                <i class="flaticon2-box icon-lg"></i>
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-5" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Response">
-                            <a href="/Response" class="nav-link btn btn-icon btn-icon-white btn-lg">
-                                <i class="flaticon2-open-box icon-lg"></i>
-                            </a>
-                        </li>
-
                         <!--end::Item-->
                     </ul>
                     <!--end::Nav-->
@@ -482,8 +469,8 @@
                         </div>
                         <!--end::Subheader-->
                     }
-                  
-                 
+
+
                     else
                     {
                         <!--begin::Subheader-->

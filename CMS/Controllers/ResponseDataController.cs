@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.Controllers
 {
-    public class WorkshopController : Controller
+    public class ResponseDataController : Controller
     {
         IHostingEnvironment _IHostingEnvironment;
         IHttpContextAccessor _IHttpContextAccessor;
@@ -21,7 +20,7 @@ namespace CMS.Controllers
         IDocumentsService _IDocumentsService;
         IUserService _IUserService;
 
-        public WorkshopController(
+        public ResponseDataController(
             IHostingEnvironment _IHostingEnvironment,
             IHttpContextAccessor _IHttpContextAccessor,
             IUnitOfWork<myDBContext> _uow,
@@ -48,40 +47,31 @@ namespace CMS.Controllers
 
 
         [HttpPost]
-        public IActionResult GetPaging(DTParameters<Workshop> param, Workshop searchModel)
+        public IActionResult GetPaging(DTParameters<ResponseData> param, ResponseData searchModel)
         {
-            var result = _IWorkshopService.GetPaging(null, true, param, false, o => o.Section);
+            var result = _IResponseDataService.GetPaging(null, true, param, false, o => o.Content);
             return Json(result);
         }
         public IActionResult GetAll()
         {
-            var result = _IWorkshopService.Where(null, true, false, o => o.Section);
+            var result = _IResponseDataService.Where(null, true, false, o => o.Content);
             return Json(result);
         }
-        public IActionResult getCategoryType()
+      
+        public RModel<ResponseData> Get(int id)
         {
-            var list = Enum.GetValues(typeof(CategoryType)).Cast<int>().Select(x => new { name = ((CategoryType)x).ToStr(), value = x.ToString(), text = ((CategoryType)x).ExGetDescription() }).ToArray();
-            return Json(list);
-        }
-        public IActionResult GetSelect()
-        {
-            var result = _IWorkshopService.Where().Result.Select(o => new TextValue { value = o.Id, text = o.Name }).ToArray();
-            return Json(result);
-        }
-        public RModel<Workshop> Get(int id)
-        {
-            var result = _IWorkshopService.Where(o => o.Id == id, true, false, o => o.Section);
+            var result = _IResponseDataService.Where(o => o.Id == id, true, false, o => o.Content);
             return (result);
         }
         public IActionResult Delete(int id)
         {
-            var deleteRow = _IWorkshopService.Delete(id);
+            var deleteRow = _IResponseDataService.Delete(id);
             var delete = _uow.SaveChanges();
             return Json(delete);
         }
-        public IActionResult InsertOrUpdate(Workshop postModel)
+        public IActionResult InsertOrUpdate(ResponseData postModel)
         {
-            var result = _IWorkshopService.InsertOrUpdate(postModel);
+            var result = _IResponseDataService.InsertOrUpdate(postModel);
             if (result.RType == RType.OK)
             {
                 var save = _uow.SaveChanges();
@@ -91,7 +81,7 @@ namespace CMS.Controllers
         }
         public IActionResult Index()
         {
-            ViewBag.pageTitle = "Workshop";
+            ViewBag.pageTitle = "ResponseData";
             return View();
         }
         public IActionResult InsertOrUpdatePage()

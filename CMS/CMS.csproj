@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>CMS</AssemblyName>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <UserSecretsId>32a82d09-efd2-498b-a232-8f9bad36c644</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +28,10 @@
     <Content Remove="Templates\**" />
     <EmbeddedResource Remove="Templates\**" />
     <None Remove="Templates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\FileManagerData\FileManager.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,6 +18,7 @@ public class RModel<T>
     public string Message { get; set; }
     public Exception Ex { get; set; }
     public RType RType { get; set; }
+
     public List<string> MessageList = new List<string>();
     public string MessageListJson { get; set; }
 }

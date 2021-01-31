@@ -3,14 +3,16 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Services.Migrations
 {
     [DbContext(typeof(myDBContext))]
-    partial class myDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210130134309_dbdsfsdsfd")]
+    partial class dbdsfsdsfd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,6 +286,9 @@ namespace Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("No")
+                        .HasColumnType("int");
+
                     b.Property<int?>("OrderNo")
                         .HasColumnType("int");
 
@@ -322,8 +327,8 @@ namespace Services.Migrations
                     b.Property<int?>("IsStatus")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LoginCount")
-                        .HasColumnType("int");
+                    b.Property<string>("LdapId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mail")
                         .HasColumnType("nvarchar(max)");
@@ -339,9 +344,6 @@ namespace Services.Migrations
 
                     b.Property<int?>("OrderNo")
                         .HasColumnType("int");
-
-                    b.Property<string>("Pass")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");

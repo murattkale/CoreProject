@@ -3,14 +3,16 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Services.Migrations
 {
     [DbContext(typeof(myDBContext))]
-    partial class myDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210130204739_dbdsfsdsfdfvfdsdfsd")]
+    partial class dbdsfsdsfdfvfdsdfsd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,6 +286,9 @@ namespace Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("No")
+                        .HasColumnType("int");
+
                     b.Property<int?>("OrderNo")
                         .HasColumnType("int");
 
@@ -320,9 +325,6 @@ namespace Services.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("IsStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("LoginCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Mail")

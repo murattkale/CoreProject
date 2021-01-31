@@ -18,6 +18,8 @@ public partial class myDBContext : DbContext
     }
 
     public virtual DbSet<User> User { get; set; }
+    public virtual DbSet<UserClient> UserClient { get; set; }
+    public virtual DbSet<UserClientSession> UserClientSession { get; set; }
     public virtual DbSet<Workshop> Workshop { get; set; }
     public virtual DbSet<Section> Section { get; set; }
     public virtual DbSet<Content> Content { get; set; }

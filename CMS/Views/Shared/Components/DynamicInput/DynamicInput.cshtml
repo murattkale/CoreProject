@@ -59,112 +59,111 @@
                 @foreach (var prp in props)
                 {
 
-                    try
+
+                    object value = null;
+                    switch (Type.GetTypeCode(prp.PropertyType))
                     {
-                        object value = null;
-                        switch (Type.GetTypeCode(prp.PropertyType))
+                        case TypeCode.Boolean:
+                        case TypeCode.Char:
+                        case TypeCode.SByte:
+                        case TypeCode.Byte:
+                        case TypeCode.Int16:
+                        case TypeCode.UInt16:
+                        case TypeCode.Int32:
+                        case TypeCode.UInt32:
+                        case TypeCode.Int64:
+                        case TypeCode.UInt64:
+                        case TypeCode.Single:
+                        case TypeCode.Double:
+                        case TypeCode.Decimal:
+                        case TypeCode.DateTime:
+                        case TypeCode.String:
+                        case TypeCode.Object:
+                            {
+                                value = Model.model.GetPropValue(prp.Name);
+                                break;
+                            }
+                    }
+
+
+                    var dName = Helpers.GetPropertyAttributes(prp);
+
+                    var DisplayName = "";
+                    if (dName.Count > 0 && dName.Any(o => o.Key == "DisplayName"))
+                        DisplayName = dName.FirstOrDefault(o => o.Key == "DisplayName").Value.ToStr();
+                    else
+                        DisplayName = prp.Name;
+
+
+                    var placeholder = "";
+                    placeholder = DisplayName;
+
+                    var Required = "";
+                    var strReq = "";
+                    if (dName.Count > 0 && dName.Any(o => o.Key == "Required"))
+                    {
+                        Required = dName.FirstOrDefault(o => o.Key == "Required").Value.ToStr();
+                        strReq = " <span style='color:red;' class='required'> * </span>";
+                        DisplayName += strReq;
+                    }
+
+
+                    var pModel = new whereCaseModel();
+                    var whereCase = Model.whereCase.ToStr().Split('=');
+                    if (whereCase.Count() > 0 && prp.Name == Model.whereCase.ToStr().Split('=')[0])
+                    {
+                        pModel = new whereCaseModel
                         {
-                            case TypeCode.Boolean:
-                            case TypeCode.Char:
-                            case TypeCode.SByte:
-                            case TypeCode.Byte:
-                            case TypeCode.Int16:
-                            case TypeCode.UInt16:
-                            case TypeCode.Int32:
-                            case TypeCode.UInt32:
-                            case TypeCode.Int64:
-                            case TypeCode.UInt64:
-                            case TypeCode.Single:
-                            case TypeCode.Double:
-                            case TypeCode.Decimal:
-                            case TypeCode.DateTime:
-                            case TypeCode.String:
-                            case TypeCode.Object:
+                            name = Model.whereCase.ToStr().Split('=')[0],
+                            whereCase = Model.whereCase.ToStr().Split('=')[1]
+                        };
+                    }
+                    else
+                    {
+                        pModel = new whereCaseModel
+                        {
+                            name = "",
+                            whereCase = ""
+                        };
+                    }
+
+
+
+                    switch (Type.GetTypeCode(prp.PropertyType))
+                    {
+                        case TypeCode.Int16:
+                        case TypeCode.UInt16:
+                        case TypeCode.UInt32:
+                        case TypeCode.Int64:
+                        case TypeCode.UInt64:
+                        case TypeCode.Object:
+                            {
+                                if (IdValue.ToInt() > 0 && (prp.PropertyType.Name == "ICollection`1" || prp.PropertyType.FullName.Contains("Entity")))
                                 {
-                                    value = Model.model.GetPropValue(prp.Name);
-                                    break;
+
                                 }
-                        }
-
-
-                        var dName = Helpers.GetPropertyAttributes(prp);
-
-                        var DisplayName = "";
-                        if (dName.Count > 0 && dName.Any(o => o.Key == "DisplayName"))
-                            DisplayName = dName.FirstOrDefault(o => o.Key == "DisplayName").Value.ToStr();
-                        else
-                            DisplayName = prp.Name;
-
-
-                        var placeholder = "";
-                        placeholder = DisplayName;
-
-                        var Required = "";
-                        var strReq = "";
-                        if (dName.Count > 0 && dName.Any(o => o.Key == "Required"))
-                        {
-                            Required = dName.FirstOrDefault(o => o.Key == "Required").Value.ToStr();
-                            strReq = " <span style='color:red;' class='required'> * </span>";
-                            DisplayName += strReq;
-                        }
-
-
-                        var pModel = new whereCaseModel();
-                        var whereCase = Model.whereCase.ToStr().Split('=');
-                        if (whereCase.Count() > 0 && prp.Name == Model.whereCase.ToStr().Split('=')[0])
-                        {
-                            pModel = new whereCaseModel
-                            {
-                                name = Model.whereCase.ToStr().Split('=')[0],
-                                whereCase = Model.whereCase.ToStr().Split('=')[1]
-                            };
-                        }
-                        else
-                        {
-                            pModel = new whereCaseModel
-                            {
-                                name = "",
-                                whereCase = ""
-                            };
-                        }
-
-
-
-                        switch (Type.GetTypeCode(prp.PropertyType))
-                        {
-                            case TypeCode.Int16:
-                            case TypeCode.UInt16:
-                            case TypeCode.UInt32:
-                            case TypeCode.Int64:
-                            case TypeCode.UInt64:
-                            case TypeCode.Object:
+                                else if (IdValue.ToInt() > 0 && (prp.PropertyType.Name == "Documents" || prp.PropertyType.Name == "Gallery"))
                                 {
-                                    if (IdValue.ToInt() > 0 && (prp.PropertyType.Name == "ICollection`1" || prp.PropertyType.FullName.Contains("Entity")))
-                                    {
 
-                                    }
-                                    else if (IdValue.ToInt() > 0 && (prp.PropertyType.Name == "Documents" || prp.PropertyType.Name == "Gallery"))
+                                }
+                                else
+                                {
+                                    var relation = props.FirstOrDefault(o => prp.Name.Substring(prp.Name.Length - 2, 2) == "Id" && o.Name == prp.Name.Replace("Id", ""));
+                                    if (relation != null || prp.Name.Substring(prp.Name.Length - 2, 2) == "Id")
                                     {
+                                        var methodName = prp.Name.Replace("Id", "");
+                                        if (relation != null)
+                                            methodName = relation.PropertyType.Name;
 
-                                    }
-                                    else
-                                    {
-                                        var relation = props.FirstOrDefault(o => prp.Name.Substring(prp.Name.Length - 2, 2) == "Id" && o.Name == prp.Name.Replace("Id", ""));
-                                        if (relation != null || prp.Name.Substring(prp.Name.Length - 2, 2) == "Id")
-                                        {
-                                            var methodName = prp.Name.Replace("Id", "");
-                                            if (relation != null)
-                                                methodName = relation.PropertyType.Name;
-
-                                            <div class="@Model.colClass">
-                                                <div class="form-group">
-                                                    <label>@Html.Raw(DisplayName)</label>
-                                                    <select @Required id="dp_@prp.Name" name="dp_@prp.Name" class="form-control form-control-solid form-control-lg"></select>
-                                                </div>
+                                        <div class="@Model.colClass">
+                                            <div class="form-group">
+                                                <label>@Html.Raw(DisplayName)</label>
+                                                <select @Required id="dp_@prp.Name" name="dp_@prp.Name" class="form-control form-control-solid form-control-lg"></select>
                                             </div>
+                                        </div>
 
 
-                                            <script type="text/javascript">
+                                        <script type="text/javascript">
                                                      $(function () {
                                                          $("#dp_@prp.Name").addOptionAjax("/@methodName/GetSelect",
                                                              {
@@ -174,78 +173,101 @@
                                                              , "value", "text", null, null, "@value", "", "@Html.Raw(placeholder) Seçiniz");
 
                                                      });
-                                            </script>
-
-                                        }
-                                        else
-                                        {
-                                            if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean"))
-                                            {
-                                                var boolCount = 12 / props.Count(o => o.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean"));
-
-                                                <div class="">
-                                                    <label style="margin-bottom: 0 !important;" class="col-md-12">@Html.Raw(DisplayName)</label>
-                                                    <div class="col-3">
-                                                        <span class="switch">
-                                                            <label>
-                                                                <input @(value.ToBoolean() == true ? " checked='checked' " : " ") type="checkbox" @Required id="@prp.Name" name="@prp.Name">
-                                                                <span></span>
-                                                            </label>
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                            }
-                                            if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Int32"))
-                                            {
-                                                <div class="@Model.colClass">
-                                                    <div class="form-group">
-                                                        <label>@Html.Raw(DisplayName)</label>
-                                                        <input @Required id="@prp.Name" name="@prp.Name" placeholder="@Html.Raw(placeholder)" value="@value" class="form-control form-control-solid form-control-lg" type="number">
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
+                                        </script>
 
                                     }
-                                    break;
+                                    else
+                                    {
+                                        if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean"))
+                                        {
+                                            var boolCount = 12 / props.Count(o => o.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean"));
+
+                                            <div class="">
+                                                <label style="margin-bottom: 0 !important;" class="col-md-12">@Html.Raw(DisplayName)</label>
+                                                <div class="col-3">
+                                                    <span class="switch">
+                                                        <label>
+                                                            <input @(value.ToBoolean() == true ? " checked='checked' " : " ") type="checkbox" @Required id="@prp.Name" name="@prp.Name">
+                                                            <span></span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                        }
+                                        if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Int32"))
+                                        {
+                                            <div class="@Model.colClass">
+                                                <div class="form-group">
+                                                    <label>@Html.Raw(DisplayName)</label>
+                                                    <input @Required id="@prp.Name" name="@prp.Name" placeholder="@Html.Raw(placeholder)" value="@value" class="form-control form-control-solid form-control-lg" type="number">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
                                 }
-                            case TypeCode.Single:
-                            case TypeCode.Double:
-                            case TypeCode.Decimal:
+                                break;
+                            }
+                        case TypeCode.Single:
+                        case TypeCode.Double:
+                        case TypeCode.Decimal:
+                            {
+                                <div class="@Model.colClass">
+                                    <div class="form-group">
+                                        <label>@Html.Raw(DisplayName)</label>
+                                        <input @Required id="@prp.Name" name="@prp.Name" placeholder="@Html.Raw(placeholder)" value="@value" class="form-control form-control-solid form-control-lg" type="text">
+                                    </div>
+                                </div>
+                                break;
+                            }
+                        case TypeCode.Boolean:
+                            {
+                                //var boolCount = 12 /
+                                //    (props.Count(o => o.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean")) <=0  ?
+                                //    props.Count(o => o.PropertyType.Name == "Boolean")
+                                //    : 1) ;
+
+                                <div class="">
+                                    <label style="margin-bottom: 0 !important;" class="col-md-12">@Html.Raw(DisplayName)</label>
+                                    <div class="col-3">
+                                        <span class="switch">
+                                            <label>
+                                                <input @(value.ToBoolean() == true ? " checked='checked' " : " ") type="checkbox" @Required id="@prp.Name" name="@prp.Name">
+                                                <span></span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                            break;
+                        case TypeCode.Int32:
+                            {
+                                if (prp.PropertyType.IsEnum)
                                 {
                                     <div class="@Model.colClass">
                                         <div class="form-group">
                                             <label>@Html.Raw(DisplayName)</label>
-                                            <input @Required id="@prp.Name" name="@prp.Name" placeholder="@Html.Raw(placeholder)" value="@value" class="form-control form-control-solid form-control-lg" type="text">
+                                            <select @Required id="dp_@prp.Name" name="dp_@prp.Name" class="form-control form-control-solid form-control-lg">
+                                            </select>
                                         </div>
                                     </div>
-                                    break;
-                                }
-                            case TypeCode.Boolean:
-                                {
-                                    //var boolCount = 12 /
-                                    //    (props.Count(o => o.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean")) <=0  ?
-                                    //    props.Count(o => o.PropertyType.Name == "Boolean")
-                                    //    : 1) ;
 
-                                    <div class="">
-                                        <label style="margin-bottom: 0 !important;" class="col-md-12">@Html.Raw(DisplayName)</label>
-                                        <div class="col-3">
-                                            <span class="switch">
-                                                <label>
-                                                    <input @(value.ToBoolean() == true ? " checked='checked' " : " ") type="checkbox" @Required id="@prp.Name" name="@prp.Name">
-                                                    <span></span>
-                                                </label>
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <script type="text/javascript">
+                                            $(function () {
+                                                $("#dp_@prp.Name").addOptionAjax("/" + TName +"/Get" + "@prp.Name", null, "value", "text", function () { }, function () { }, "@(value == null ? "" : ((int)value).ToStr())", "", "Seçiniz");
+                                            });
+                                    </script>
                                 }
-                                break;
-                            case TypeCode.Int32:
+                                else
                                 {
-                                    if (prp.PropertyType.IsEnum)
+                                    var relation = props.FirstOrDefault(o => prp.Name.Substring(prp.Name.Length - 2, 2) == "Id" && o.Name == prp.Name.Replace("Id", ""));
+                                    if (relation != null || prp.Name.Substring(prp.Name.Length - 2, 2) == "Id")
                                     {
+                                        var methodName = prp.Name.Replace("Id", "");
+                                        if (relation != null)
+                                            methodName = relation.PropertyType.Name;
+
                                         <div class="@Model.colClass">
                                             <div class="form-group">
                                                 <label>@Html.Raw(DisplayName)</label>
@@ -254,32 +276,9 @@
                                             </div>
                                         </div>
 
+
+
                                         <script type="text/javascript">
-                                            $(function () {
-                                                $("#dp_@prp.Name").addOptionAjax("/" + TName +"/Get" + "@prp.Name", null, "value", "text", function () { }, function () { }, "@(value == null ? "" : ((int)value).ToStr())", "", "Seçiniz");
-                                            });
-                                        </script>
-                                    }
-                                    else
-                                    {
-                                        var relation = props.FirstOrDefault(o => prp.Name.Substring(prp.Name.Length - 2, 2) == "Id" && o.Name == prp.Name.Replace("Id", ""));
-                                        if (relation != null || prp.Name.Substring(prp.Name.Length - 2, 2) == "Id")
-                                        {
-                                            var methodName = prp.Name.Replace("Id", "");
-                                            if (relation != null)
-                                                methodName = relation.PropertyType.Name;
-
-                                            <div class="@Model.colClass">
-                                                <div class="form-group">
-                                                    <label>@Html.Raw(DisplayName)</label>
-                                                    <select @Required id="dp_@prp.Name" name="dp_@prp.Name" class="form-control form-control-solid form-control-lg">
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-
-                                            <script type="text/javascript">
                                                      $(function () {
                                                          $("#dp_@prp.Name").addOptionAjax("/@methodName/GetSelect",
                                                              {
@@ -289,98 +288,98 @@
                                                              , "value", "text", null, null, "@value", "", "@Html.Raw(placeholder) Seçiniz");
 
                                                      });
-                                            </script>
+                                        </script>
 
-                                        }
-                                        else
+                                    }
+                                    else
+                                    {
+                                        if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean"))
                                         {
-                                            if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Boolean"))
-                                            {
 
 
-                                                <div class="">
-                                                    <label style="margin-bottom: 0 !important;" class="col-md-12">@Html.Raw(DisplayName)</label>
-                                                    <div class="col-3">
-                                                        <span class="switch">
-                                                            <label>
-                                                                <input @(value.ToBoolean() == true ? " checked='checked' " : " ") type="checkbox" @Required id="@prp.Name" name="@prp.Name">
-                                                                <span></span>
-                                                            </label>
-                                                        </span>
-                                                    </div>
+                                            <div class="">
+                                                <label style="margin-bottom: 0 !important;" class="col-md-12">@Html.Raw(DisplayName)</label>
+                                                <div class="col-3">
+                                                    <span class="switch">
+                                                        <label>
+                                                            <input @(value.ToBoolean() == true ? " checked='checked' " : " ") type="checkbox" @Required id="@prp.Name" name="@prp.Name">
+                                                            <span></span>
+                                                        </label>
+                                                    </span>
                                                 </div>
-                                            }
-                                            if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Int32"))
-                                            {
-                                                <div class="@Model.colClass">
-                                                    <div class="form-group">
-                                                        <label>@Html.Raw(DisplayName)</label>
-                                                        <input @Required id="@prp.Name" name="@prp.Name" placeholder="@Html.Raw(placeholder)" value="@value" class="form-control form-control-solid form-control-lg" type="number">
-                                                    </div>
+                                            </div>
+                                        }
+                                        if (prp.PropertyType.GenericTypeArguments.Any(o => o.Name == "Int32"))
+                                        {
+                                            <div class="@Model.colClass">
+                                                <div class="form-group">
+                                                    <label>@Html.Raw(DisplayName)</label>
+                                                    <input @Required id="@prp.Name" name="@prp.Name" placeholder="@Html.Raw(placeholder)" value="@value" class="form-control form-control-solid form-control-lg" type="number">
                                                 </div>
-                                            }
+                                            </div>
                                         }
                                     }
-                                    break;
                                 }
-                            case TypeCode.DateTime:
-                                {
-                                    <div class="@Model.colClass">
-                                        <div class="row form-group">
-                                            <div class="@Model.labelClass">
-                                                <label class="control-label" for="@prp.Name">@Html.Raw(DisplayName)</label>
-                                            </div>
-                                            <div class="input-group-append input-group date Model.inputClass">
-                                                <input @Required
-                                                       placeholder="@(placeholder + " Seçiniz")"
-                                                       autocomplete="off"
-                                                       id="@prp.Name"
-                                                       name="@prp.Name"
-                                                       value="(@(value.ToDateTime().Value.Year < 1900 ? " " : value?.ToDateTime().Value.ToShortDateString()))"
-                                                       class="form-control form-control-solid form-control-lg"
-                                                       type="datetime">
+                                break;
+                            }
+                        case TypeCode.DateTime:
+                            {
+                                <div class="@Model.colClass">
+                                    <div class="row form-group">
+                                        <div class="@Model.labelClass">
+                                            <label class="control-label" for="@prp.Name">@Html.Raw(DisplayName)</label>
+                                        </div>
+                                        <div class="input-group-append input-group date Model.inputClass">
+                                            <input @Required
+                                                   placeholder="@(placeholder + " Seçiniz")"
+                                                   autocomplete="off"
+                                                   id="@prp.Name"
+                                                   name="@prp.Name"
+                                                   value="(@(value.ToDateTime().Value.Year < 1900 ? " " : value?.ToDateTime().Value.ToShortDateString()))"
+                                                   class="form-control form-control-solid form-control-lg"
+                                                   type="datetime">
 
-                                                <span class="input-group-text"><i class="la la-calendar"></i></span>
-                                            </div>
+                                            <span class="input-group-text"><i class="la la-calendar"></i></span>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <script type="text/javascript">
+                                <script type="text/javascript">
                                         $(function () {
                                             $("#@prp.Name").datepicker({ format: "dd/mm/yyyy", language: "tr", todayBtn: "linked", clearBtn: !0, todayHighlight: !0 });
                                         });
-                                    </script>
+                                </script>
 
-                                    break;
-                                }
-                            case TypeCode.String:
+                                break;
+                            }
+                        case TypeCode.String:
+                            {
+                                var textName = "";
+                                if (dName.Count > 0 && dName.Any(o => o.Key == "DataType"))
+                                    textName = dName.FirstOrDefault(o => o.Key == "DataType").Value.ToStr();
+
+                                if (textName != "")
                                 {
-                                    var textName = "";
-                                    if (dName.Count > 0 && dName.Any(o => o.Key == "DataType"))
-                                        textName = dName.FirstOrDefault(o => o.Key == "DataType").Value.ToStr();
-
-                                    if (textName != "")
+                                    if (textName == "text")
                                     {
-                                        if (textName == "text")
-                                        {
-                                            <style>
-                                                .hlError {
-                                                    background-color: #fea;
-                                                    color: #f33;
-                                                }
+                                        <style>
+                                            .hlError {
+                                                background-color: #fea;
+                                                color: #f33;
+                                            }
 
-                                                .hlOK {
-                                                    background-color: #aef;
-                                                    color: #060;
-                                                }
+                                            .hlOK {
+                                                background-color: #aef;
+                                                color: #060;
+                                            }
 
-                                                .inlineCode {
-                                                    font: bold 12px monospace;
-                                                }
-                                            </style>
-                                            <div class="form-group">
-                                                <label>@Html.Raw(DisplayName)</label>
-                                                @(Html.Kendo().Editor()
+                                            .inlineCode {
+                                                font: bold 12px monospace;
+                                            }
+                                        </style>
+                                        <div class="form-group">
+                                            <label>@Html.Raw(DisplayName)</label>
+                                            @(Html.Kendo().Editor()
                                                           .Name(prp.Name)
                                                           .HtmlAttributes(new { style = "width: 100%; height:200px", aria_label = "editor" })
                                                           .Tools(tools => tools
@@ -409,34 +408,30 @@
                                                       .Value(value.ToStr())
                                         )
 
-                                            </div>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="@Model.colClass">
-                                            <div class="form-group">
-                                                <label>@Html.Raw(DisplayName)</label>
-                                                <input class="form-control form-control-solid form-control-lg"
-                                                       @Required
-                                                       id="@prp.Name"
-                                                       name="@prp.Name"
-                                                       placeholder="@Html.Raw(placeholder)"
-                                                       value="@System.Uri.UnescapeDataString(value.ToStr())"
-                                                       type="@((prp.Name == "Pass" || prp.Name == "Password" || prp.Name == "Sifre") ? "password" : "text" ))">
-                                            </div>
                                         </div>
-
                                     }
-                                    break;
                                 }
-                        }
+                                else
+                                {
+                                    <div class="@Model.colClass">
+                                        <div class="form-group">
+                                            <label>@Html.Raw(DisplayName)</label>
+                                            <input class="form-control form-control-solid form-control-lg"
+                                                   @Required
+                                                   id="@prp.Name"
+                                                   name="@prp.Name"
+                                                   placeholder="@Html.Raw(placeholder)"
+                                                   value="@System.Uri.UnescapeDataString(value.ToStr())"
+                                                   type="@((prp.Name == "Pass" || prp.Name == "Password" || prp.Name == "Sifre") ? "password" : "text" ))">
+                                        </div>
+                                    </div>
 
+                                }
+                                break;
+                            }
                     }
-                    catch (Exception ex)
-                    {
 
-                    }
+
                 }
 
             </div>
@@ -476,11 +471,11 @@
                         $.LoadingOverlay("show");
                         $.ajx("/" + TName + "/Delete",
                             { id: dataid }, function (resultData) {
-                                if (resultData && resultData.IsDeleted) {
+                                if (resultData.RType == 1) {
                                     location.href = "/" + TName + "/InsertOrUpdatePage";
                                 }
                                 else {
-                                    alerts(resultData.ResultType.MessageList[0]);
+                                    alerts(resultData.Message);
                                 }
                                 $.LoadingOverlay("hide");
                             });
@@ -496,13 +491,12 @@
                 $.LoadingOverlay("show");
                 $.ajx("/" + controllerName + "/" + InsertMethodName,
                     { postModel: postModel }, function (resultData) {
-                        try {
-                            location.href = "/" + controllerName;
-
-                        } catch (ex) {
-                            location.reload();
+                        if (resultData.RType == 1) {
+                            location.href = "/" + controllerName + '/Index';
                         }
-
+                        else {
+                            alerts(resultData.Message);
+                        }
                         $.LoadingOverlay("hide");
                     }, function () { location.reload(); });
             });
