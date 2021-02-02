@@ -44,22 +44,6 @@ public enum CategoryType : int
     [Description("Category3")]
     Category3 = 3,
 }
-public enum TemplateType : int
-{
-    [Description("None")]
-    None = 0,
-    [Description("Normal Html")]
-    NormalHtml = 1,
-    [Description("Sayfa")]
-    Sayfa = 2,
-    [Description("Full Sayfa")]
-    FullSayfa = 4,
-    [Description("Dikey Sayfa")]
-    DikeySayfa = 5,
-    [Description("Yatay Sayfa")]
-    YataySayfa = 6,
-}
-
 
 
 

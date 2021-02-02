@@ -45,14 +45,9 @@ namespace CMS.Controllers
 
 
         [HttpPost]
-        public IActionResult GetPaging(DTParameters<Content> param, Content searchModel)
+        public IActionResult GetPaging(DTParameters<Content> param, int selectid)
         {
-            var result = _IContentService.GetPaging(null, true, param, false, o => o.Section);
-            return Json(result);
-        }
-        public IActionResult GetAll()
-        {
-            var result = _IContentService.Where(null, true, false, o => o.Section);
+            var result = _IContentService.GetPaging(o => o.SectionId == selectid, true, param, false, o => o.Section);
             return Json(result);
         }
 

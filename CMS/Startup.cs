@@ -101,9 +101,9 @@ namespace CMS
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration config)
+        public void Configure(IApplicationBuilder app, IConfiguration config)
         {
-            if (env.IsDevelopment())
+            if (HostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -118,7 +118,6 @@ namespace CMS
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseAuthenticationMiddleware();
 
             app.UseMiddleware<ErrorMid>();

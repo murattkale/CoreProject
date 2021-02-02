@@ -1,4 +1,16 @@
-﻿
+﻿@{
+    var selectid_Section = Context.Request.Query["selectid"].ToInt();
+    var controllerName_Section = "Section";
+    var titleName_Section = "Section";
+    var dt_Section = "dt_" + controllerName_Section;
+}
+<script>
+    var selectid_Section = "@selectid_Section";
+    var controllerName_Section = "@controllerName_Section";
+    var titleName_Section = "@titleName_Section";
+    var dt_Section = "#@dt_Section";
+</script>
+
 <div class="row">
     <div class="col-xl-12">
         <!--begin::Advance Table Widget 10-->
@@ -6,16 +18,16 @@
             <!--begin::Header-->
             <div class="card-header border-0 py-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label font-weight-bolder text-dark">Section</span>
+                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_Section)</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="/@Html.Raw("Section")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">New Record</a>
+                    <a href="/@Html.Raw(controllerName_Section)/InsertOrUpdatePage?selectid=@selectid_Section" class="btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_Section)</a>
                 </div>
             </div>
             <!--end::Header-->
             <div class="card-body py-0">
                 <div class="table-responsive">
-                    <table id="dt_Section" class="table table-bordered table-hover table-checkable">
+                    <table id="@dt_Section" class="table table-bordered table-hover table-checkable">
                         <thead>
                             <tr>
                             </tr>
@@ -25,53 +37,43 @@
             </div>
         </div>
     </div>
-
 </div>
 
 
-
-
 <script>
-
     $(function () {
-
         getGrid();
-
         function getGrid() {
             var columns = [];
             columns.push({ "data": "Id", text: "ID" });
-            columns.push({ "data": "WorkshopId", text: "WorkshopId" });
             columns.push({ "data": "OrderNo", text: "OrderNo" });
             columns.push({ "data": "Name", text: "Name" });
             columns.push({ "data": "Definition", text: "Definition" });
             columns.push({ "data": "WorkName", text: "WorkName" });
 
-
             columns.push({ "data": "Detail", text: "Detail" });
 
             $.each(columns, function (i, item) {
-                $('#dt_Section' + ' thead tr').append('<td>' + item.text + '</td>');
+                $(dt_Section + ' thead tr').append('<td> ' + item.text + '</td > ');
             });
-
-            var table = $('#dt_Section').DataTable({
+            var table = $(dt_Section).DataTable({
                 "ajax": {
-                    "url": '/Section/GetPaging',
+                    "url": '/' + controllerName_Section + '/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
-                        //$('#dt_Section').LoadingOverlay("show");
-
-
+                        $(dt_Section).LoadingOverlay("show");
+                        searchModel.selectid = selectid_Section;
                     },
                     "dataSrc": function (json) {
                         return_data = new Array();
                         var data = json.data;
-
                         $.each(data, function (i, row) {
-                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Section/InsertOrUpdatePage?id=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_Section + '/InsertOrUpdatePage?id=' + row.Id + '&selecttype=' + selectid_Section + '" title="Edit"><i class="la la-edit"></i></a>';
+                            detail += '<a target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Content/Index?selectid=' + row.Id + '" title="Contents"><i class="fas fa-plus"></i></a>';
+
                             return_data.push({
                                 'Id': row.Id,
-                                'WorkshopId': row.WorkshopId,
                                 'OrderNo': row.OrderNo,
                                 'Name': row.Name,
                                 'Definition': row.Definition,
@@ -81,29 +83,11 @@
                             });
 
                         });
-                        $('#dt_Section').LoadingOverlay("hide");
+                        $(dt_Section).LoadingOverlay("hide");
                         return return_data;
                     }
                 },
                 "fnDrawCallback": function (settings, json) {
-
-                    //$(".buttons-excel-top").click(function () {
-                    //    $(".buttons-excel").click(); $(".buttons-excel").trigger('click');
-                    //    return false;
-
-                    //})
-                    //$(".buttons-copy-top").click(function () {
-                    //    $(".buttons-copy").click(); $(".buttons-copy").trigger('click');
-                    //    return false;
-                    //})
-                    //$(".buttons-csv-top").click(function () {
-                    //    $(".buttons-csv").click(); $(".buttons-csv").trigger('click');
-                    //    return false;
-                    //})
-                    //$(".buttons-pdf-top").click(function () {
-                    //    $(".buttons-pdf").click(); $(".buttons-pdf").trigger('click');
-                    //    return false;
-                    //})
 
                     $('.dt-buttons').css('float', 'right');
                     $('.dt-buttons').css('margin-left', '20px');
@@ -111,71 +95,36 @@
 
                     $(table).LoadingOverlay("hide");
                     ayarlar();
-
-
-
                 },
-                //"language": {
-                //    "url": "/content/json/Turkish.json",
-                //},
-                //"dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 hideMe col-md-6'B><'col-sm-12 col-md-6'f>><'row'><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-10'i><'col-sm-12 col-md-2'p>>",
-                //"buttons": ['copy', 'csv', 'excel', 'pdf'],
                 "destroy": true,
                 "caseInsensitive": true,
-                //"serverSide": true,
                 "responsive": true,
                 "pageLength": 10,
                 "DisplayLength": 10,
                 "lengthMenu": [[10, 25, 100, 1000, 2500, 5000], [10, 25, 100, 1000, 2500, 5000]],
                 "lengthChange": true,
                 "processing": true,
-                "order": [[2, "asc"]],
-                'rowReorder': {
-                    'selector': 'tr',
-                    //'dataSrc': 'seq', // follow the json data
-                },
-                //"columnDefs": [
-                //    { "orderable": true, "targets": [1] },
-                //],
                 "columns": columns,
-
+                "order": [[1, "asc"]],
+                rowReorder: true,
+                columnDefs: [
+                    { orderable: true, className: 'reorder', targets: 0 },
+                    { orderable: false, targets: '_all' }
+                ],
             });
 
 
-            table.on('row-reorder.dt', function (dragEvent, diff, nodes) {
-
+            table.on(dt_Section + ' row-reorder.dt', function (dragEvent, diff, nodes) {
                 var myArray = [];
                 for (var i = 0, ien = diff.length; i < ien; i++) {
-                    var rowData = table.row(diff[i].node).data();
-                    myArray.push({
-                        id: rowData.Id,
-                        dataid: rowData.WorkshopId,
-                        OrderNo: diff[i].newPosition
-                    });
+                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, dataid: selectid_Section, OrderNo: diff[i].newPosition });
                 }
-                debugger;
-
-                $.ajx('/Section/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
-
-                //for (var i = 0, ien = data.length; i < ien; i++) {
-                //    var rowData = table.row(data[i].node).data();
-                //    var direction = "";
-                //    if (data[i].newPosition < data[i].oldPosition)
-                //        direction = "back";
-                //    else {
-                //        direction = "forward";
-                //    }
-                //    debugger;
-                //    var diff = data[i];
-
-                //}
+                $.ajx('/' + dt_Section + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
             });
 
 
 
         }
-
-
 
     });
 </script>

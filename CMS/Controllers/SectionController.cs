@@ -65,19 +65,9 @@ namespace CMS.Controllers
 
 
         [HttpPost]
-        public IActionResult GetPaging(DTParameters<Section> param, Section searchModel)
+        public IActionResult GetPaging(DTParameters<Section> param, int selectid)
         {
-            var result = _ISectionService.GetPaging(null, true, param, false, o => o.Workshop);
-            return Json(result);
-        }
-        public IActionResult GetAll()
-        {
-            var result = _ISectionService.Where(null, true, false, o => o.Workshop);
-            return Json(result);
-        }
-        public IActionResult GetSelect()
-        {
-            var result = _ISectionService.Where().Result.Select(o => new TextValue { value = o.Id, text = o.Name }).ToArray();
+            var result = _ISectionService.GetPaging(o => o.WorkshopId == selectid, true, param, false, o => o.Workshop);
             return Json(result);
         }
         public RModel<Section> Get(int id)
@@ -93,14 +83,6 @@ namespace CMS.Controllers
         }
         public IActionResult InsertOrUpdate(Section postModel)
         {
-            var list = _ISectionService.Where(o => o.WorkshopId == postModel.WorkshopId).Result.ToList();
-            var i = 0;
-
-            list.ForEach(o => { i++; o.OrderNo = i; _ISectionService.Update(o); });
-            var saves = _uow.SaveChanges();
-
-            var lastRow = _ISectionService.Where(o => o.WorkshopId == postModel.WorkshopId).Result.OrderByDescending(o => o.Id).FirstOrDefault();
-            if (lastRow != null) postModel.OrderNo = lastRow.OrderNo + 1; else postModel.OrderNo = 0;
             var result = _ISectionService.InsertOrUpdate(postModel);
             if (result.RType == RType.OK)
             {

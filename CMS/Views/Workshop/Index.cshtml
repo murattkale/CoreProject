@@ -1,4 +1,14 @@
-﻿
+﻿@{
+    var controllerName_Workshop = "Workshop";
+    var titleName_Workshop = "Workshop";
+    var dt_Workshop = "dt_" + controllerName_Workshop;
+}
+<script>
+    var controllerName_Workshop = "@controllerName_Workshop";
+    var titleName_Workshop = "@titleName_Workshop";
+    var dt_Workshop = "#@dt_Workshop";
+</script>
+
 <div class="row">
     <div class="col-xl-12">
         <!--begin::Advance Table Widget 10-->
@@ -6,16 +16,16 @@
             <!--begin::Header-->
             <div class="card-header border-0 py-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label font-weight-bolder text-dark">Workshop</span>
+                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_Workshop)</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="/@Html.Raw("Workshop")/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">New Record</a>
+                    <a href="/@Html.Raw(controllerName_Workshop)/InsertOrUpdatePage" class="btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_Workshop)</a>
                 </div>
             </div>
             <!--end::Header-->
             <div class="card-body py-0">
                 <div class="table-responsive">
-                    <table id="dt_Workshop" class="table table-bordered table-hover table-checkable">
+                    <table id="@dt_Workshop" class="table table-bordered table-hover table-checkable">
                         <thead>
                             <tr>
                             </tr>
@@ -25,39 +35,32 @@
             </div>
         </div>
     </div>
-
 </div>
-
 
 
 <script>
 
     $(function () {
-
         getGrid();
-
         function getGrid() {
             var columns = [];
             columns.push({ "data": "Id", text: "ID" });
             columns.push({ "data": "Name", text: "Name" });
             columns.push({ "data": "Definition", text: "Definition" });
 
-
             columns.push({ "data": "Detail", text: "Detail" });
 
             $.each(columns, function (i, item) {
-                $('#dt_Workshop' + ' thead tr').append('<td>' + item.text + '</td>');
+                $(dt_Workshop + ' thead tr').append('<td> ' + item.text + '</td > ');
             });
 
-            var table = $('#dt_Workshop').DataTable({
+            var table = $(dt_Workshop).DataTable({
                 "ajax": {
-                    "url": '/Workshop/GetPaging',
+                    "url": '/' + controllerName_Workshop + '/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
-                        $('#dt_Workshop').LoadingOverlay("show");
-
-
+                        $(dt_Workshop).LoadingOverlay("show");
                     },
                     "dataSrc": function (json) {
                         return_data = new Array();
@@ -65,6 +68,8 @@
 
                         $.each(data, function (i, row) {
                             var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Workshop/InsertOrUpdatePage?id=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+                            detail += '<a target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Section/Index?selectid=' + row.Id + '" title="Sections"><i class="fas fa-plus"></i></a>';
+
                             return_data.push({
                                 'Id': row.Id,
                                 'Name': row.Name,
@@ -73,61 +78,46 @@
                             });
 
                         });
-                        $('#dt_Workshop').LoadingOverlay("hide");
+                        $(dt_Workshop).LoadingOverlay("hide");
                         return return_data;
                     }
                 },
                 "fnDrawCallback": function (settings, json) {
 
-                    //$(".buttons-excel-top").click(function () {
-                    //    $(".buttons-excel").click(); $(".buttons-excel").trigger('click');
-                    //    return false;
-
-                    //})
-                    //$(".buttons-copy-top").click(function () {
-                    //    $(".buttons-copy").click(); $(".buttons-copy").trigger('click');
-                    //    return false;
-                    //})
-                    //$(".buttons-csv-top").click(function () {
-                    //    $(".buttons-csv").click(); $(".buttons-csv").trigger('click');
-                    //    return false;
-                    //})
-                    //$(".buttons-pdf-top").click(function () {
-                    //    $(".buttons-pdf").click(); $(".buttons-pdf").trigger('click');
-                    //    return false;
-                    //})
-
                     $('.dt-buttons').css('float', 'right');
                     $('.dt-buttons').css('margin-left', '20px');
                     $('.dt-buttons').css('margin-top', '16px');
 
-                    $(table).LoadingOverlay("hide");
+                    $(dt_Workshop).LoadingOverlay("hide");
                     ayarlar();
                 },
-                //"language": {
-                //    "url": "/content/json/Turkish.json",
-                //},
-                //"dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 hideMe col-md-6'B><'col-sm-12 col-md-6'f>><'row'><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-10'i><'col-sm-12 col-md-2'p>>",
-                //"buttons": ['copy', 'csv', 'excel', 'pdf'],
                 "destroy": true,
                 "caseInsensitive": true,
-                //"serverSide": true,
                 "responsive": true,
                 "pageLength": 10,
                 "DisplayLength": 10,
                 "lengthMenu": [[10, 25, 100, 1000, 2500, 5000], [10, 25, 100, 1000, 2500, 5000]],
                 "lengthChange": true,
                 "processing": true,
-                "order": [[0, "desc"]],
-                //"columnDefs": [
-                //    { "orderable": true, "targets": [1] },
-                //],
                 "columns": columns,
+                "order": [[0, "desc"]],
+                rowReorder: true,
+                columnDefs: [
+                    { orderable: true, className: 'reorder', targets: 0 },
+                    { orderable: false, targets: '_all' }
+                ],
 
             });
 
 
+            table.on(dt_Workshop + ' row-reorder.dt', function (dragEvent, diff, nodes) {
+                var myArray = [];
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, OrderNo: diff[i].newPosition });
+                }
+                $.ajx('/' + dt_Workshop + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
 
+            });
 
         }
 

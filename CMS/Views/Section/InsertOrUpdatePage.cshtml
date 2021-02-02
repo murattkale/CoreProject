@@ -1,11 +1,13 @@
 ﻿@{
     var postModel = ViewBag.edit as Section;
     var EnumText = "Section";
+    var selectid_Section = Context.Request.Query["selectid"].ToInt();
     var disabled = "";
 
     if (postModel == null)
     {
         postModel = new Section();
+        postModel.WorkshopId = selectid_Section;
     }
     else
     {

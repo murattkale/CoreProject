@@ -46,6 +46,23 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
+        [HttpPost]
+        public IActionResult UpdateOrder(List<OrderUpdateModel> postModel)
+        {
+            var rows = _IWorkshopService.Where().Result.ToList();
+            postModel.ForEach(o =>
+            {
+                var row = rows.FirstOrDefault(r => r.Id == o.Id);
+                if (row != null)
+                {
+                    row.OrderNo = o.OrderNo;
+                    _IWorkshopService.Update(row);
+                }
+            });
+            _uow.SaveChanges();
+            return Json("ok");
+        }
+
 
         [HttpPost]
         public IActionResult GetPaging(DTParameters<Workshop> param, Workshop searchModel)
