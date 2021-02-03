@@ -45,6 +45,8 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
+       
+
 
         [HttpPost]
         public IActionResult GetPaging(DTParameters<ResponseData> param, ResponseData searchModel)

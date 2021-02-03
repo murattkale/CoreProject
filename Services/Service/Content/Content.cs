@@ -14,13 +14,12 @@ public partial class Content : BaseModel
 
     }
 
-
     [Required]
     public bool Interaction { get; set; }
 
     [Required]
     public string ContentData { get; set; }
-
+     
     [Required]
     public DocumentType DocumentType { get; set; }
 
@@ -31,6 +30,7 @@ public partial class Content : BaseModel
 
     public string DocVideoDesc { get; set; }
 
+    [DisplayName("Section")]
     [Required]
     public int SectionId { get; set; }
     public virtual Section Section { get; set; }

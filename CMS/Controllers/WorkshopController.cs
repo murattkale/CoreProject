@@ -46,6 +46,13 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
+
+        public IActionResult getCategoryType()
+        {
+            var list = Enum.GetValues(typeof(CategoryType)).Cast<int>().Select(x => new { name = ((CategoryType)x).ToStr(), value = x.ToString(), text = ((CategoryType)x).ExGetDescription() }).ToArray();
+            return Json(list);
+        }
+
         [HttpPost]
         public IActionResult UpdateOrder(List<OrderUpdateModel> postModel)
         {
@@ -63,7 +70,6 @@ namespace CMS.Controllers
             return Json("ok");
         }
 
-
         [HttpPost]
         public IActionResult GetPaging(DTParameters<Workshop> param, Workshop searchModel)
         {
@@ -74,11 +80,6 @@ namespace CMS.Controllers
         {
             var result = _IWorkshopService.Where(null, true, false, o => o.Section);
             return Json(result);
-        }
-        public IActionResult getCategoryType()
-        {
-            var list = Enum.GetValues(typeof(CategoryType)).Cast<int>().Select(x => new { name = ((CategoryType)x).ToStr(), value = x.ToString(), text = ((CategoryType)x).ExGetDescription() }).ToArray();
-            return Json(list);
         }
         public IActionResult GetSelect()
         {

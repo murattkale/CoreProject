@@ -73,7 +73,7 @@
 
 
     @*<link href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css" rel="stylesheet">
-    <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js" type="text/javascript"></script>*@
+        <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js" type="text/javascript"></script>*@
 
 
     <script src="~/content/js/bootbox.min.js" type="text/javascript"></script>
@@ -107,7 +107,39 @@
 
 
         }
-           ayarlar();
+        ayarlar();
+
+        var CategoryTypeAll = [];
+        function getCategoryType() {
+            $.ajx("/Content/getCategoryType", {}, function (result) {
+                CategoryTypeAll = result;
+            }, function () { });
+        }
+        getCategoryType();
+
+        var DocumentTypeAll = [];
+        function getDocumentType() {
+            $.ajx("/Content/getDocumentType", {}, function (result) {
+                DocumentTypeAll = result;
+            }, function () { });
+        }
+        getDocumentType();
+
+        var ActionTypeAll = [];
+        function getActionType() {
+            $.ajx("/ActionData/getActionType", {}, function (result) {
+                ActionTypeAll = result;
+            }, function () { });
+        }
+        getActionType();
+
+        var ResponseTypeAll = [];
+        function getResponseType() {
+            $.ajx("/ActionData/getResponseType", {}, function (result) {
+                ResponseTypeAll = result;
+            }, function () { });
+        }
+        getResponseType();
 
     </script>
 

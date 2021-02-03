@@ -1,14 +1,15 @@
 ﻿@{
-    var selectid_Section = Context.Request.Query["selectid"].ToInt();
-    var controllerName_Section = "Section";
-    var titleName_Section = "Section";
-    var dt_Section = "dt_" + controllerName_Section;
+    var selectid_Content = Context.Request.Query["selectid"].ToInt();
+    var controllerName_Content = "Content";
+    var titleName_Content = "Content";
+    var dt_Content = "dt_" + controllerName_Content;
+
 }
 <script>
-    var selectid_Section = "@selectid_Section";
-    var controllerName_Section = "@controllerName_Section";
-    var titleName_Section = "@titleName_Section";
-    var dt_Section = "#@dt_Section";
+    var selectid_Content = "@selectid_Content";
+    var controllerName_Content = "@controllerName_Content";
+    var titleName_Content = "@titleName_Content";
+    var dt_Content = "#@dt_Content";
 </script>
 
 <div class="row">
@@ -18,16 +19,16 @@
             <!--begin::Header-->
             <div class="card-header border-0 py-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_Section)</span>
+                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_Content)</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="/@Html.Raw(controllerName_Section)/InsertOrUpdatePage?selectid=@selectid_Section" class="btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_Section)</a>
+                    <a href="/@Html.Raw(controllerName_Content)/InsertOrUpdatePage?selectid=@selectid_Content" class="btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_Content)</a>
                 </div>
             </div>
             <!--end::Header-->
             <div class="card-body py-0">
                 <div class="table-responsive">
-                    <table id="@dt_Section" class="table table-bordered table-hover table-checkable">
+                    <table id="@dt_Content" class="table table-bordered table-hover table-checkable">
                         <thead>
                             <tr>
                             </tr>
@@ -41,49 +42,46 @@
 
 
 <script>
+
     $(function () {
         getGrid();
         function getGrid() {
             var columns = [];
             columns.push({ "data": "Id", text: "ID" });
-            columns.push({ "data": "OrderNo", text: "OrderNo" });
-            columns.push({ "data": "Name", text: "Name" });
+            columns.push({ "data": "Interaction", text: "Interaction" });
             columns.push({ "data": "Definition", text: "Definition" });
-            columns.push({ "data": "WorkName", text: "WorkName" });
 
             columns.push({ "data": "Detail", text: "Detail" });
 
             $.each(columns, function (i, item) {
-                $(dt_Section + ' thead tr').append('<td> ' + item.text + '</td > ');
+                $(dt_Content + ' thead tr').append('<td> ' + item.text + '</td > ');
             });
-            var table = $(dt_Section).DataTable({
+
+            var table = $(dt_Content).DataTable({
                 "ajax": {
-                    "url": '/' + controllerName_Section + '/GetPaging',
+                    "url": '/' + controllerName_Content + '/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
-                        $(dt_Section).LoadingOverlay("show");
-                        searchModel.selectid = selectid_Section;
+                        $(dt_Content).LoadingOverlay("show");
                     },
                     "dataSrc": function (json) {
                         return_data = new Array();
                         var data = json.data;
+
                         $.each(data, function (i, row) {
-                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_Section + '/InsertOrUpdatePage?id=' + row.Id + '&selecttype=' + selectid_Section + '" title="Edit"><i class="la la-edit"></i></a>';
-                            detail += '<a target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Content/Index?selectid=' + row.Id + '" title="Contents"><i class="fas fa-plus"></i></a>';
+                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Content/InsertOrUpdatePage?id=' + row.Id + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+                            detail += '<a target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Section/Index?selectid=' + row.Id + '" title="Sections"><i class="fas fa-plus"></i></a>';
 
                             return_data.push({
                                 'Id': row.Id,
-                                'OrderNo': row.OrderNo,
-                                'Name': row.Name,
+                                'Interaction': row.Interaction,
                                 'Definition': row.Definition,
-                                'WorkName': row.Workshop?.Name,
-
                                 'Detail': detail,
                             });
 
                         });
-                        $(dt_Section).LoadingOverlay("hide");
+                        $(dt_Content).LoadingOverlay("hide");
                         return return_data;
                     }
                 },
@@ -93,7 +91,7 @@
                     $('.dt-buttons').css('margin-left', '20px');
                     $('.dt-buttons').css('margin-top', '16px');
 
-                    $(table).LoadingOverlay("hide");
+                    $(dt_Content).LoadingOverlay("hide");
                     ayarlar();
                 },
                 "destroy": true,
@@ -105,24 +103,28 @@
                 "lengthChange": true,
                 "processing": true,
                 "columns": columns,
-                "order": [[1, "asc"]],
+                "order": [[0, "desc"]],
                 rowReorder: true,
                 columnDefs: [
                     { orderable: true, className: 'reorder', targets: 0 },
                     { orderable: false, targets: '_all' }
                 ],
+
             });
 
 
-            table.on(dt_Section + ' row-reorder.dt', function (dragEvent, diff, nodes) {
+            table.on(dt_Content + ' row-reorder.dt', function (dragEvent, diff, nodes) {
                 var myArray = [];
                 for (var i = 0, ien = diff.length; i < ien; i++) {
-                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, dataid: selectid_Section, OrderNo: diff[i].newPosition });
+                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, OrderNo: diff[i].newPosition });
                 }
-                $.ajx('/' + dt_Section + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+                $.ajx('/' + dt_Content + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+
             });
 
         }
+
+
 
     });
 </script>

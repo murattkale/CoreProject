@@ -43,6 +43,38 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
+     
+
+        public IActionResult getDocumentType()
+        {
+            var list = Enum.GetValues(typeof(DocumentType)).Cast<int>().Select(x => new { name = ((DocumentType)x).ToStr(), value = x.ToString(), text = ((DocumentType)x).ExGetDescription() }).ToArray();
+            return Json(list);
+        }
+
+
+        public IActionResult getResponseType()
+        {
+            var list = Enum.GetValues(typeof(ResponseType)).Cast<int>().Select(x => new { name = ((ResponseType)x).ToStr(), value = x.ToString(), text = ((ResponseType)x).ExGetDescription() }).ToArray();
+            return Json(list);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrder(List<OrderUpdateModel> postModel)
+        {
+            var rows = _IContentService.Where(o => o.SectionId == postModel.FirstOrDefault().dataid).Result.ToList();
+            postModel.ForEach(o =>
+            {
+                var row = rows.FirstOrDefault(r => r.Id == o.Id);
+                if (row != null)
+                {
+                    row.OrderNo = o.OrderNo;
+                    _IContentService.Update(row);
+                }
+            });
+            _uow.SaveChanges();
+            return Json("ok");
+        }
+
 
         [HttpPost]
         public IActionResult GetPaging(DTParameters<Content> param, int selectid)
@@ -50,6 +82,8 @@ namespace CMS.Controllers
             var result = _IContentService.GetPaging(o => o.SectionId == selectid, true, param, false, o => o.Section);
             return Json(result);
         }
+
+       
 
         public RModel<Content> Get(int id)
         {

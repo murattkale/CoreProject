@@ -70,6 +70,13 @@ namespace CMS.Controllers
             var result = _ISectionService.GetPaging(o => o.WorkshopId == selectid, true, param, false, o => o.Workshop);
             return Json(result);
         }
+
+        [HttpPost]
+        public IActionResult GetSelect()
+        {
+            var result = _ISectionService.Where(null, true, false, o => o.Workshop).Result.Select(o => new TextValue { text = o.Name + " " + (o.Workshop.Name), value = o.Id });
+            return Json(result);
+        }
         public RModel<Section> Get(int id)
         {
             var result = _ISectionService.Where(o => o.Id == id, true, false, o => o.Workshop);

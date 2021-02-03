@@ -46,6 +46,14 @@ namespace CMS.Controllers
         }
 
 
+        public IActionResult getActionType()
+        {
+            var list = Enum.GetValues(typeof(ActionType)).Cast<int>().Select(x => new { name = ((ActionType)x).ToStr(), value = x.ToString(), text = ((ActionType)x).ExGetDescription() }).ToArray();
+            return Json(list);
+        }
+
+
+
         [HttpPost]
         public IActionResult GetPaging(DTParameters<ActionData> param, ActionData searchModel)
         {
