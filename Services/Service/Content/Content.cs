@@ -14,9 +14,8 @@ public partial class Content : BaseModel
 
     }
 
-    [Required]
-    public bool Interaction { get; set; }
 
+    [DataType("text")]
     [Required]
     public string ContentData { get; set; }
      

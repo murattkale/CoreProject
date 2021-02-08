@@ -100,12 +100,11 @@ namespace CMS.Controllers
         public IActionResult InsertOrUpdate(Workshop postModel)
         {
             var result = _IWorkshopService.InsertOrUpdate(postModel);
-            if (result.RType == RType.OK)
-            {
-                var save = _uow.SaveChanges();
+            var save = _uow.SaveChanges();
+            if (save.RType == RType.OK)
+                return Json(result);
+            else
                 return Json(save);
-            }
-            return Json(result);
         }
         public IActionResult Index()
         {

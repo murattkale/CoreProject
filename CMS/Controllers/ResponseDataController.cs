@@ -45,7 +45,12 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
-       
+        public IActionResult getResponseType()
+        {
+            var list = Enum.GetValues(typeof(ResponseType)).Cast<int>().Select(x => new { name = ((ResponseType)x).ToStr(), value = x.ToString(), text = ((ResponseType)x).ExGetDescription() }).ToArray();
+            return Json(list);
+        }
+
 
 
         [HttpPost]
@@ -59,7 +64,7 @@ namespace CMS.Controllers
             var result = _IResponseDataService.Where(null, true, false, o => o.Content);
             return Json(result);
         }
-      
+
         public RModel<ResponseData> Get(int id)
         {
             var result = _IResponseDataService.Where(o => o.Id == id, true, false, o => o.Content);
@@ -74,12 +79,11 @@ namespace CMS.Controllers
         public IActionResult InsertOrUpdate(ResponseData postModel)
         {
             var result = _IResponseDataService.InsertOrUpdate(postModel);
-            if (result.RType == RType.OK)
-            {
-                var save = _uow.SaveChanges();
+            var save = _uow.SaveChanges();
+            if (save.RType == RType.OK)
+                return Json(result);
+            else
                 return Json(save);
-            }
-            return Json(result);
         }
         public IActionResult Index()
         {

@@ -1,0 +1,63 @@
+﻿@{
+    var postModel = ViewBag.edit as Content;
+    var selectid_Section = Context.Request.Query["selectid"].ToInt();
+
+    if (postModel == null)
+    {
+        postModel = new Content();
+        postModel.SectionId = selectid_Section;
+    }
+    else
+    {
+    }
+}
+
+<div class="d-flex flex-row">
+
+    <partial name="../Content/Menu" />
+
+    <!--begin::Content-->
+    <div class="flex-row-fluid ml-lg-8">
+        <!--begin::Card-->
+        <div class="card card-custom card-stretch">
+            <!--begin::Header-->
+            <div class="card-header py-3">
+                <div class="card-title align-items-start flex-column">
+                    <h3 class="card-label font-weight-bolder text-dark">Documentation</h3>
+                    @*<span class="text-muted font-weight-bold font-size-sm mt-1">İşlemi tamamladıktan sonra kaydetmeyi unutmayınız.</span>*@
+                </div>
+
+            </div>
+            <!--end::Header-->
+            <!--begin::Form-->
+            <!--begin::Body-->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        @await Component.InvokeAsync("DynamicInput", new DynamicModel()
+                          {
+                              model = postModel,
+                              controllerName = "Idea",
+                              PageType = "Documents",
+                              titleName = "Documents",
+                              InsertMethodName = "InsertOrUpdate",
+                              labelClass = "col-md-4",
+                              inputClass = "col-md-8",
+                              colClass = "col-md-6",
+                              nonProp = "",
+                              orderby = "",
+                              addBtn = "<input type='submit' value='" + "Save" + "' " + "class='btn btn-primary btn-shadow-hover font-weight-bold mr-2' />",
+                              removeBtn = "",
+
+                          })
+
+                    </div>
+                </div>
+            </div>
+
+            <!--end::Form-->
+        </div>
+    </div>
+    <!--end::Content-->
+</div>
+

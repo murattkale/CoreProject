@@ -43,7 +43,28 @@ namespace CMS.Controllers
             this._IUserService = _IUserService;
         }
 
-     
+
+        [Route("Content/Documentation/{id:int}")]
+        public IActionResult Documentation(int id)
+        {
+            var edit = Get(id);
+            ViewBag.edit = edit?.Result?.FirstOrDefault();
+            return View();
+        }
+
+        public IActionResult ResponseData(int selectid)
+        {
+            var edit = Get(selectid);
+            ViewBag.edit = edit?.Result?.FirstOrDefault();
+            return View();
+        }
+
+        public IActionResult getCategoryType()
+        {
+            var list = Enum.GetValues(typeof(CategoryType)).Cast<int>().Select(x => new { name = ((CategoryType)x).ToStr(), value = x.ToString(), text = ((CategoryType)x).ExGetDescription() }).ToArray();
+            return Json(list);
+        }
+
 
         public IActionResult getDocumentType()
         {
@@ -58,7 +79,6 @@ namespace CMS.Controllers
             return Json(list);
         }
 
-        [HttpPost]
         public IActionResult UpdateOrder(List<OrderUpdateModel> postModel)
         {
             var rows = _IContentService.Where(o => o.SectionId == postModel.FirstOrDefault().dataid).Result.ToList();
@@ -76,14 +96,18 @@ namespace CMS.Controllers
         }
 
 
-        [HttpPost]
         public IActionResult GetPaging(DTParameters<Content> param, int selectid)
         {
             var result = _IContentService.GetPaging(o => o.SectionId == selectid, true, param, false, o => o.Section);
             return Json(result);
         }
 
-       
+        public IActionResult GetSelect()
+        {
+            var result = _IContentService.Where(null, true, false, o => o.Section).Result.Select(o => new TextValue { value = o.Id, text = o.ContentData }).ToArray(); ;
+            return Json(result);
+        }
+
 
         public RModel<Content> Get(int id)
         {
@@ -99,12 +123,11 @@ namespace CMS.Controllers
         public IActionResult InsertOrUpdate(Content postModel)
         {
             var result = _IContentService.InsertOrUpdate(postModel);
-            if (result.RType == RType.OK)
-            {
-                var save = _uow.SaveChanges();
+            var save = _uow.SaveChanges();
+            if (save.RType == RType.OK)
+                return Json(result);
+            else
                 return Json(save);
-            }
-            return Json(result);
         }
 
         [HttpPost]

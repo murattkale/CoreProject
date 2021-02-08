@@ -442,6 +442,14 @@
         </form>
     </div>
     <script>
+        function getQuery(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
         $(function () {
             //var langInt = setInterval(function () {
             //    $("#dp_LangId").val(1);
@@ -492,7 +500,15 @@
                 $.ajx("/" + controllerName + "/" + InsertMethodName,
                     { postModel: postModel }, function (resultData) {
                         if (resultData.RType == 1) {
-                            location.href = "/" + controllerName + '/Index';
+                            var selectid = getQuery('selectid');
+                            debugger;
+                            if (location.href.indexOf('/Content/') != -1) {
+                                location.reload();
+                                //location.href = "/" + controllerName + '/InsertOrUpdate?id=' + resultData.ResultRow.Id + (selectid > 0 ? '&selectid=' + selectid : '');
+                            }
+                            else {
+                                location.href = "/" + controllerName + '/Index' + (selectid > 0 ? '?selectid=' + selectid : '');
+                            }
                         }
                         else {
                             alerts(resultData.Message);

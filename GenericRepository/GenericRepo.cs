@@ -33,6 +33,7 @@ public class GenericRepo<C, T> : IGenericRepo<T> where T : class, IBaseModel whe
             res = Update(model);
         else
             res = Add(model);
+
         return res;
     }
 

@@ -135,7 +135,7 @@
 
         var ResponseTypeAll = [];
         function getResponseType() {
-            $.ajx("/ActionData/getResponseType", {}, function (result) {
+            $.ajx("/ResponeData/getResponseType", {}, function (result) {
                 ResponseTypeAll = result;
             }, function () { });
         }
@@ -219,13 +219,6 @@
                             </a>
                         </li>
 
-                        <!--end::Item-->
-                        <!--begin::Item-->
-                        <li class="nav-item mb-5" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="Section">
-                            <a href="/Section/Index" class="nav-link btn btn-icon btn-icon-white btn-lg">
-                                <i class="flaticon2-list-3 icon-lg"></i>
-                            </a>
-                        </li>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <!--end::Item-->

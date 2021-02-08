@@ -68,7 +68,7 @@
 
                         $.each(data, function (i, row) {
                             var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Workshop/InsertOrUpdatePage?id=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
-                            detail += '<a target="_blank" class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Section/Index?selectid=' + row.Id + '" title="Sections"><i class="fas fa-plus"></i></a>';
+                            detail += '<a  class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/Section/Index?selectid=' + row.Id + '" title="Sections"><i class="fas fa-plus"></i></a>';
 
                             return_data.push({
                                 'Id': row.Id,

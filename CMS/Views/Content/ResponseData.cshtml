@@ -1,34 +1,38 @@
 ﻿@{
-    var selectid_Content = Context.Request.Query["selectid"].ToInt();
-    var controllerName_Content = "Content";
-    var titleName_Content = "Content";
-    var dt_Content = "dt_" + controllerName_Content;
+    var selectid_ResponseData = Context.Request.Query["selectid"].ToInt();
+    var controllerName_ResponseData = "ResponseData";
+    var titleName_ResponseData = "ResponseData";
+    var dt_ResponseData = "dt_" + controllerName_ResponseData;
 
 }
 <script>
-    var selectid_Content = "@selectid_Content";
-    var controllerName_Content = "@controllerName_Content";
-    var titleName_Content = "@titleName_Content";
-    var dt_Content = "#@dt_Content";
+    var selectid_ResponseData = "@selectid_ResponseData";
+    var controllerName_ResponseData = "@controllerName_ResponseData";
+    var titleName_ResponseData = "@titleName_ResponseData";
+    var dt_ResponseData = "#@dt_ResponseData";
 </script>
 
-<div class="row">
-    <div class="col-xl-12">
+<div class="d-flex flex-row">
+
+    <partial name="../Content/Menu" />
+
+    <!--begin::ResponseData-->
+    <div class="flex-row-fluid ml-lg-8">
         <!--begin::Advance Table Widget 10-->
         <div class="card card-custom gutter-b card-stretch">
             <!--begin::Header-->
             <div class="card-header border-0 py-5">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_Content)</span>
+                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_ResponseData)</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="/@Html.Raw(controllerName_Content)/InsertOrUpdatePage?selectid=@selectid_Content" class="btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_Content)</a>
+                    <a href="/@Html.Raw(controllerName_ResponseData)/InsertOrUpdatePage?selectid=@selectid_ResponseData" class="mymodal btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_ResponseData)</a>
                 </div>
             </div>
             <!--end::Header-->
             <div class="card-body py-0">
                 <div class="table-responsive">
-                    <table id="@dt_Content" class="table table-bordered table-hover table-checkable">
+                    <table id="@dt_ResponseData" class="table table-bordered table-hover table-checkable">
                         <thead>
                             <tr>
                             </tr>
@@ -48,37 +52,37 @@
         function getGrid() {
             var columns = [];
             columns.push({ "data": "Id", text: "ID" });
-            columns.push({ "data": "ContentData", text: "ContentData" });
+            columns.push({ "data": "ReponseContent", text: "ReponseContent" });
 
             columns.push({ "data": "Detail", text: "Detail" });
 
             $.each(columns, function (i, item) {
-                $(dt_Content + ' thead tr').append('<td> ' + item.text + '</td > ');
+                $(dt_ResponseData + ' thead tr').append('<td> ' + item.text + '</td > ');
             });
 
-            var table = $(dt_Content).DataTable({
+            var table = $(dt_ResponseData).DataTable({
                 "ajax": {
-                    "url": '/' + controllerName_Content + '/GetPaging',
+                    "url": '/' + controllerName_ResponseData + '/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
-                        $(dt_Content).LoadingOverlay("show");
-                        searchModel.selectid = selectid_Content;
+                        $(dt_ResponseData).LoadingOverlay("show");
+                        searchModel.selectid = selectid_ResponseData;
                     },
                     "dataSrc": function (json) {
                         return_data = new Array();
                         var data = json.data;
 
                         $.each(data, function (i, row) {
-                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_Content + '/InsertOrUpdatePage?id=' + row.Id + '&' + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_ResponseData + '/InsertOrUpdatePage?id=' + row.Id + '&' + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
                             return_data.push({
                                 'Id': row.Id,
-                                'ContentData': row.ContentData,
+                                'ReponseContent': row.ReponseContent,
                                 'Detail': detail,
                             });
 
                         });
-                        $(dt_Content).LoadingOverlay("hide");
+                        $(dt_ResponseData).LoadingOverlay("hide");
                         return return_data;
                     }
                 },
@@ -88,7 +92,7 @@
                     $('.dt-buttons').css('margin-left', '20px');
                     $('.dt-buttons').css('margin-top', '16px');
 
-                    $(dt_Content).LoadingOverlay("hide");
+                    $(dt_ResponseData).LoadingOverlay("hide");
                     ayarlar();
                 },
                 "destroy": true,
@@ -110,12 +114,12 @@
             });
 
 
-            table.on(dt_Content + ' row-reorder.dt', function (dragEvent, diff, nodes) {
+            table.on(dt_ResponseData + ' row-reorder.dt', function (dragEvent, diff, nodes) {
                 var myArray = [];
                 for (var i = 0, ien = diff.length; i < ien; i++) {
                     var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, OrderNo: diff[i].newPosition });
                 }
-                $.ajx('/' + dt_Content + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+                $.ajx('/' + dt_ResponseData + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
 
             });
 
