@@ -74,7 +74,7 @@ namespace CMS.Controllers
         [HttpPost]
         public IActionResult GetSelect()
         {
-            var result = _ISectionService.Where(null, true, false, o => o.Workshop).Result.Select(o => new TextValue { text = o.Name + " " + (o.Workshop.Name), value = o.Id });
+            var result = _ISectionService.Where(null, true, false, o => o.Workshop).Result.Select(o => new TextValue { text = o.Workshop.Name + "/" + o.Name, value = o.Id });
             return Json(result);
         }
         public RModel<Section> Get(int id)

@@ -44,15 +44,21 @@ namespace CMS.Controllers
         }
 
 
-        [Route("Content/Documentation/{id:int}")]
-        public IActionResult Documentation(int id)
+        public IActionResult Documentation(int selectid)
         {
-            var edit = Get(id);
+            var edit = Get(selectid);
             ViewBag.edit = edit?.Result?.FirstOrDefault();
             return View();
         }
 
         public IActionResult ResponseData(int selectid)
+        {
+            var edit = Get(selectid);
+            ViewBag.edit = edit?.Result?.FirstOrDefault();
+            return View();
+        }
+
+        public IActionResult ActionData(int selectid)
         {
             var edit = Get(selectid);
             ViewBag.edit = edit?.Result?.FirstOrDefault();
@@ -102,9 +108,17 @@ namespace CMS.Controllers
             return Json(result);
         }
 
+        [HttpPost]
         public IActionResult GetSelect()
         {
-            var result = _IContentService.Where(null, true, false, o => o.Section).Result.Select(o => new TextValue { value = o.Id, text = o.ContentData }).ToArray(); ;
+            var result = _IContentService.Where(null, true, false, o => o.Section).Result.Select(o => new TextValue { text = o.ContentData, value = o.Id });
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult GetSelectId(int SectionId)
+        {
+            var result = _IContentService.Where(o=>o.SectionId== SectionId, true, false, o => o.Section).Result.Select(o => new TextValue { text = o.ContentData, value = o.Id });
             return Json(result);
         }
 
@@ -130,23 +144,40 @@ namespace CMS.Controllers
                 return Json(save);
         }
 
-        [HttpPost]
-        public JsonResult SaveMultiDoc(List<Documents> DocList)
+
+        public IActionResult DeleteDocuments(int id)
         {
-            List<RModel<Documents>> rList = new List<RModel<Documents>>();
-            DocList.ForEach(o =>
-            {
-                var result = _IDocumentsService.InsertOrUpdate(o);
-                rList.Add(result);
-            });
-            return Json(rList);
+            //var result = _IDocumentsService.Where(o =>  o.Id == id).Result.FirstOrDefault();
+            //var path = this.GetPathAndFilename(result.Link);
+            //if (System.IO.File.Exists(path))
+            //    System.IO.File.Delete(path);
 
-
+            var resultDel = _IDocumentsService.Delete(id);
+            _uow.SaveChanges();
+            return Json(resultDel);
         }
+
         public ActionResult GetDocuments(DTParameters<Documents> param, Documents searchModel)
         {
             var result = _IDocumentsService.GetPaging(o => o.ContentId == searchModel.ContentId, true, param, false);
             return Json(result);
+        }
+
+
+
+        [HttpPost]
+        public JsonResult SaveMultiDoc(List<Documents> DocList)
+        {
+            List<RModel<myDBContext>> rList = new List<RModel<myDBContext>>();
+            DocList.ForEach(o =>
+            {
+                var result = _IDocumentsService.InsertOrUpdate(o);
+                var save = _uow.SaveChanges();
+                rList.Add(save);
+            });
+            return Json(rList);
+
+
         }
 
 

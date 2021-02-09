@@ -11,11 +11,13 @@ public partial class ResponseData : BaseModel
         ActionData = new HashSet<ActionData>();
     }
 
+
+    [DataType("text")]
     [Required]
     public string ReponseContent { get; set; }
 
-    [Required]
-    public ResponseType ResponseType { get; set; }
+    //[Required]
+    //public ResponseType ResponseType { get; set; }
 
     [Required]
     public int ContentId { get; set; }

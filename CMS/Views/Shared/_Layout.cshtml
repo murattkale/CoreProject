@@ -135,7 +135,7 @@
 
         var ResponseTypeAll = [];
         function getResponseType() {
-            $.ajx("/ResponeData/getResponseType", {}, function (result) {
+            $.ajx("/Content/getResponseType", {}, function (result) {
                 ResponseTypeAll = result;
             }, function () { });
         }

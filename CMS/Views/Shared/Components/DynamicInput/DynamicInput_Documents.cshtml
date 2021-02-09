@@ -155,7 +155,7 @@
                                                                             "datatype": "json",
                                                                             "data": function (searchModel) {
                                                                                 $('#dt_' + TName).LoadingOverlay("show");
-                                                                                searchModel.DocumentId = idval;
+                                                                                searchModel.ContentId = idval;
 
                                                                             },
                                                                             "dataSrc": function (json) {
@@ -193,7 +193,7 @@
                                                                                     if (result == true) {
                                                                                         $(table).LoadingOverlay("show");
                                                                                         $.ajx('/' + controllerName + '/Delete' + prpname, { id: dataid }, function (resultData) {
-                                                                                            if (resultData && resultData.IsDeleted) {
+                                                                                            if (resultData && resultData.ResultRow?.IsDeleted) {
                                                                                                 table.ajax.reload();
                                                                                             }
                                                                                             else {
@@ -285,7 +285,7 @@
                                                                 }*@
                                                             @if (prp.Name == "ContentId")
                                                             {
-                                                                <input type="hidden" id="file_DocumentId_@prp.Name" name="file_id_@prp.Name" value="@doc?.ContentId" />
+                                                                <input type="hidden" id="file_ContentId_@prp.Name" name="file_id_@prp.Name" value="@doc?.ContentId" />
                                                             }
                                                             @*@if (prp.Name == "PictureId")
                                                                 {

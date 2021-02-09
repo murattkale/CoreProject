@@ -3,7 +3,7 @@
     var postModel = ViewBag.edit as ResponseData;
     var EnumText = "ResponseData";
     var selectid_ResponseData = Context.Request.Query["selectid"].ToInt();
-    var disabled = "";
+    var disabled = "OrderNo";
 
     if (postModel == null)
     {

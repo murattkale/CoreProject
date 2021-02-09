@@ -16,7 +16,6 @@
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2021.1.119" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.2" />
-    
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -30,9 +29,7 @@
     <None Remove="Templates\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Views\FileManagerData\FileManager.cshtml" />
-  </ItemGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\GenericRepository\GenericRepository.csproj" />

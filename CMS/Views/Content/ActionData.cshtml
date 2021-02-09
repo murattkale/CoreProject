@@ -1,0 +1,148 @@
+﻿@{
+    var selectid_ResponseData = Context.Request.Query["selectid"].ToInt();
+    var controllerName_ResponseData = "ResponseData";
+    var titleName_ResponseData = "ResponseData";
+    var dt_ResponseData = "dt_" + controllerName_ResponseData;
+
+}
+<script>
+    var selectid_ResponseData = "@selectid_ResponseData";
+    var controllerName_ResponseData = "@controllerName_ResponseData";
+    var titleName_ResponseData = "@titleName_ResponseData";
+    var dt_ResponseData = "#@dt_ResponseData";
+</script>
+
+<div class="d-flex flex-row">
+
+    <partial name="../Content/Menu" />
+
+    <!--begin::ResponseData-->
+    <div class="flex-row-fluid ml-lg-8">
+        <!--begin::Advance Table Widget 10-->
+        <div class="card card-custom gutter-b card-stretch">
+            <!--begin::Header-->
+            <div class="card-header border-0 py-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label font-weight-bolder text-dark">@Html.Raw(titleName_ResponseData)</span>
+                </h3>
+                <div class="card-toolbar">
+                    <a href="/@Html.Raw(controllerName_ResponseData)/InsertOrUpdatePage?selectid=@selectid_ResponseData" class="mymodal btn btn-light-primary font-weight-bolder btn-sm">New @Html.Raw(titleName_ResponseData)</a>
+                </div>
+            </div>
+            <!--end::Header-->
+            <div class="card-body py-0">
+                <div class="table-responsive">
+                    <table id="@dt_ResponseData" class="table table-bordered table-hover table-checkable">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var SectionData = [];
+
+    $(function () {
+        function GetSection() { $.ajx('/Section/GetSelect', null, function (resultData) { SectionData = resultData; getGrid(); }); }
+        GetSection();
+
+
+
+        function getGrid() {
+            var columns = [];
+            columns.push({ "data": "Id", text: "ID" });
+            columns.push({ "data": "ReponseContent", text: "ReponseContent" });
+            columns.push({ "data": "Section", text: "Section" });
+            columns.push({ "data": "Content", text: "Content" });
+
+            columns.push({ "data": "Detail", text: "Detail" });
+
+            $.each(columns, function (i, item) {
+                $(dt_ResponseData + ' thead tr').append('<td> ' + item.text + '</td > ');
+            });
+
+            var table = $(dt_ResponseData).DataTable({
+                "ajax": {
+                    "url": '/' + controllerName_ResponseData + '/GetPaging',
+                    "type": "POST",
+                    "datatype": "json",
+                    "data": function (searchModel) {
+                        $(dt_ResponseData).LoadingOverlay("show");
+                        searchModel.selectid = selectid_ResponseData;
+                    },
+                    "dataSrc": function (json) {
+                        return_data = new Array();
+                        var data = json.data;
+
+                        $.each(data, function (i, row) {
+                            var detail = '<a class="mymodal btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_ResponseData + '/InsertOrUpdatePage?id=' + row.Id + '&' + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+
+                            var Section = '<select dataid="' + row.Id + '" name="dp_Section_' + row.Id + '" id="dp_Section_' + row.Id + '" class="dp_section form-control form-control-solid form-control-lg"></select>';
+                            var Content = '<select dataid="' + row.Id + '" name="dp_Content_' + row.Id + '" id="dp_Content_' + row.Id + '" class="dp_content form-control form-control-solid form-control-lg"></select>';
+
+                            return_data.push({
+                                'Id': row.Id,
+                                'ReponseContent': row.ReponseContent,
+                                'Section': Section,
+                                'Content': Content,
+
+                                'Detail': detail,
+                            });
+
+                        });
+                        $(dt_ResponseData).LoadingOverlay("hide");
+                        return return_data;
+                    }
+                },
+                "fnDrawCallback": function (settings, json) {
+
+                    $('.dp_section').addOption(SectionData, 'value', 'text', null, null, 0, null, 'Section Seçiniz');
+
+                    $('.dp_section').change(function () {
+                        var id = $(this).attr('dataid');
+                        $('#dp_Content_' + id).addOptionAjax('/Content/GetSelectId', { SectionId: $(this).val() }, 'value', 'text', null, null, 0, null, 'Content Seçiniz');
+                    });
+
+
+                    $(dt_ResponseData).LoadingOverlay("hide");
+                    ayarlar();
+                },
+                "destroy": true,
+                "caseInsensitive": true,
+                "responsive": true,
+
+                "lengthChange": false,
+                'paging': false,
+                "processing": true,
+                "columns": columns,
+                "order": [[0, "desc"]],
+                rowReorder: true,
+                columnDefs: [
+                    { orderable: true, className: 'reorder', targets: 0 },
+                    { orderable: false, targets: '_all' }
+                ],
+
+            });
+
+
+            table.on(dt_ResponseData + ' row-reorder.dt', function (dragEvent, diff, nodes) {
+                var myArray = [];
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, OrderNo: diff[i].newPosition });
+                }
+                $.ajx('/' + dt_ResponseData + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+
+            });
+
+        }
+
+
+
+    });
+</script>

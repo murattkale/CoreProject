@@ -147,7 +147,7 @@ public class GenericRepo<C, T> : IGenericRepo<T> where T : class, IBaseModel whe
         RModel<T> res = new RModel<T>();
         try
         {
-            var t = Where(o => o.Id == id).ResultRow;
+            var t = Where(o => o.Id == id).Result.FirstOrDefault();
             t.IsDeleted = DateTime.Now;
             var upd = Update(t);
             res.ResultRow = t;

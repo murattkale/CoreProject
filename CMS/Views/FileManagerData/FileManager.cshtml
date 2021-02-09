@@ -40,13 +40,7 @@
             if (DocName == "Documents") {
                 $.ajx('/' + cont + '/SaveMultiDoc', { DocList: DocList, }, function (resultData) {
                     console.log(resultData)
-                    var errorMessage = '';
-                    $.each(resultData, function (i, item) {
-                        if (item.ResultType.MessageList.length > 0) {
-                            errorMessage += item.ResultType.MessageList + ' <br/>';
-                        }
-                    });
-                    if (errorMessage) {
+                    if (resultData.Message) {
                         alert(errorMessage);
                     }
                     else {
@@ -88,7 +82,7 @@
                 {
                     Link: item.path,
                     Name: item.name,
-                    DocumentId: DocName == "Documents" ? ids : null,
+                    ContentId: DocName == "Documents" ? ids : null,
 
                 }
             );
