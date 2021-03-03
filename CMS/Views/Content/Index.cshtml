@@ -113,9 +113,9 @@
             table.on(dt_Content + ' row-reorder.dt', function (dragEvent, diff, nodes) {
                 var myArray = [];
                 for (var i = 0, ien = diff.length; i < ien; i++) {
-                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, OrderNo: diff[i].newPosition });
+                    var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, OrderNo: diff[i].newPosition, dataid:selectid_Content });
                 }
-                $.ajx('/' + dt_Content + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+                $.ajx('/' + controllerName_Content + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
 
             });
 

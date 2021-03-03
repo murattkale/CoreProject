@@ -105,7 +105,7 @@
                 "lengthChange": true,
                 "processing": true,
                 "columns": columns,
-                "order": [[1, "asc"]],
+                "order": [[0, "asc"]],
                 rowReorder: true,
                 columnDefs: [
                     { orderable: true, className: 'reorder', targets: 0 },
@@ -119,7 +119,7 @@
                 for (var i = 0, ien = diff.length; i < ien; i++) {
                     var rowData = table.row(diff[i].node).data(); myArray.push({ id: rowData.Id, dataid: selectid_Section, OrderNo: diff[i].newPosition });
                 }
-                $.ajx('/' + dt_Section + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
+                $.ajx('/' + controllerName_Section + '/UpdateOrder', { postModel: myArray }, function (resultData) { table.ajax.reload(); $(table).LoadingOverlay("hide"); });
             });
 
         }

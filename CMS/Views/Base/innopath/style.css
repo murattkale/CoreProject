@@ -1,0 +1,465 @@
+.innopath-button, .innopath-popup {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+    .innopath-button *, .innopath-popup * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+        .innopath-button *:before, .innopath-popup *:before {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .innopath-button *:after, .innopath-popup *:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+    .innopath-button img, .innopath-popup img {
+        vertical-align: middle;
+    }
+
+.innopath-button {
+    font-family: helvetica, arial, sans-serif;
+    position: fixed;
+    z-index: 9999;
+    bottom: 20px;
+    right: 15px;
+    padding: 10px 15px;
+    padding-right: 65px;
+    background: #fff;
+    border-radius: 23px;
+    font-size: 11px;
+    line-height: normal;
+    cursor: pointer;
+    transition: .4s;
+}
+
+    .innopath-button .ib-number {
+        position: absolute;
+        right: 0;
+        top: -4.5px;
+        width: 55px;
+        line-height: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: #fff;
+        text-align: center;
+        font-size: 15px;
+        color: #00BBB6;
+        transition: .4s;
+    }
+
+        .innopath-button .ib-number:before {
+            content: '';
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #d6f2f0;
+            position: absolute;
+            left: 5.5px;
+            top: 5.5px;
+            transition: .4s;
+        }
+
+        .innopath-button .ib-number.quarter:before {
+            border-top: 2px solid #00BBB6;
+        }
+
+        .innopath-button .ib-number.half:before {
+            border-top: 2px solid #00BBB6;
+            border-right: 2px solid #00BBB6;
+        }
+
+        .innopath-button .ib-number.seventyfive:before {
+            border-top: 2px solid #00BBB6;
+            border-right: 2px solid #00BBB6;
+            border-bottom: 2px solid #00BBB6;
+        }
+
+        .innopath-button .ib-number.full:before {
+            border: 2px solid #00BBB6;
+        }
+
+        .innopath-button .ib-number span {
+            font-size: 6px;
+        }
+
+    .innopath-button:hover {
+        background: #00BBB6;
+        color: #fff;
+    }
+
+        .innopath-button:hover .ib-number {
+            background: #00BBB6;
+            color: #fff;
+        }
+
+            .innopath-button:hover .ib-number:before {
+                border-color: #47c8c4;
+            }
+
+            .innopath-button:hover .ib-number.quarter:before {
+                border-top: 2px solid #fff;
+            }
+
+            .innopath-button:hover .ib-number.half:before {
+                border-top: 2px solid #fff;
+                border-right: 2px solid #fff;
+            }
+
+            .innopath-button:hover .ib-number.seventyfive:before {
+                border-top: 2px solid #fff;
+                border-right: 2px solid #fff;
+                border-bottom: 2px solid #fff;
+            }
+
+            .innopath-button:hover .ib-number.full:before {
+                border: 2px solid #fff;
+            }
+
+
+.innopath-popup {
+    font-family: helvetica, arial, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    line-height: normal;
+    font-size: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: .7s;
+}
+
+    .innopath-popup.ip-active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .innopath-popup .ip-tint {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,.7);
+    }
+
+    .innopath-popup .ip-box {
+        width: 1100px;
+        margin: 0 auto;
+        border-radius: 15px;
+        background: #fff;
+        z-index: 1;
+    }
+
+    .innopath-popup .ip-header {
+        line-height: 80px;
+        padding: 0 30px;
+    }
+
+    .innopath-popup .ip-header-left {
+        display: inline-block;
+    }
+
+        .innopath-popup .ip-header-left img {
+            margin-right: 10px;
+        }
+
+    .innopath-popup .ip-header-right {
+        float: right;
+    }
+
+        .innopath-popup .ip-header-right .ip-cls {
+            margin-left: 15px;
+        }
+
+.ip-sections {
+    width: 300px;
+    float: left;
+    padding: 20px 30px;
+    font-size: 12px;
+    color: #8E93BB;
+}
+
+    .ip-sections .ip-item {
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .ip-sections .ip-img {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        background: #EDEDF1;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+        border-radius: 50%;
+        text-align: center;
+        position: relative;
+        transition: .4s;
+    }
+
+        .ip-sections .ip-img:after {
+            content: '';
+            width: 4px;
+            height: 34px;
+            border-radius: 2px;
+            background: #EDEDF1;
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: -7px;
+            left: 8px;
+            transition: .4s;
+        }
+
+    .ip-sections .ip-item.ip-done .ip-img {
+        background: none;
+    }
+
+        .ip-sections .ip-item.ip-done .ip-img img {
+            display: none;
+        }
+
+        .ip-sections .ip-item.ip-done .ip-img:after {
+            background: #49B8B5;
+        }
+
+    .ip-sections .ip-item.ip-active .ip-img, .ip-sections .ip-item.ip-active .ip-img:after {
+        background: #4C52BC;
+    }
+
+    .ip-sections .ip-item:hover .ip-img, .ip-sections .ip-item:hover .ip-img:after {
+        background: #4C52BC;
+    }
+
+    .ip-sections .ip-item.ip-done:hover .ip-img {
+        background: none;
+    }
+
+.innopath-popup .ip-content {
+    width: 650px;
+    float: left;
+}
+
+    .innopath-popup .ip-content .ip-item {
+        display: none;
+    }
+
+        .innopath-popup .ip-content .ip-item.ip-active {
+            display: block;
+        }
+
+.innopath-popup .ip-bottom {
+    clear: both;
+    line-height: 100px;
+    border-top: 1px solid #EDEDF1;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.innopath-popup .ip-message-input {
+    width: 420px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: -100px;
+}
+
+    .innopath-popup .ip-message-input input, textarea {
+        border: 1px solid #C3C5D2;
+        width: 100%;
+        height: 60px;
+        resize: none;
+        font-size: 14px;
+        padding-left: 15px;
+        padding-right: 50px;
+        border-radius: 5px;
+        vertical-align: middle;
+        line-height: normal;
+    }
+
+    .innopath-popup .ip-message-input textarea {
+        padding-top: 15px;
+    }
+
+    .innopath-popup .ip-message-input button {
+        position: absolute;
+        border: 0;
+        background: url(img/send.svg) no-repeat;
+        width: 26px;
+        height: 24px;
+        top: 28px;
+        right: 7px;
+    }
+
+.innopath-popup .ip-intro {
+    color: #353977;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 500px;
+}
+
+    .innopath-popup .ip-intro .ip-title {
+        font-size: 30px;
+        color: #36377B;
+        margin: 30px 0;
+        font-weight: bold;
+    }
+
+    .innopath-popup .ip-intro .ip-message {
+        text-align: left;
+        margin-top: 30px;
+    }
+
+.innopath-popup .ip-button {
+    line-height: 40px;
+    padding: 0 30px;
+    color: #fff;
+    background: #49B8B5;
+    border-radius: 5px;
+    display: inline-block;
+    text-decoration: none;
+    transition: .4s;
+}
+
+    .innopath-popup .ip-button:hover {
+        background: #3e9c9a;
+    }
+
+.ip-button.ip-answer {
+    background: #353977;
+    color: #fff;
+    border-radius: 15px;
+    line-height: 30px;
+    padding: 0 15px;
+    margin: 0 5px;
+    font-size: 12px;
+}
+
+.ip-button.ip-orange {
+    border: 1px solid #FF8F20;
+    color: #FF8F20;
+}
+
+    .ip-button.ip-orange:hover {
+        background: #FF8F20;
+        color: #fff;
+    }
+
+.ip-button.ip-green {
+    border: 1px solid #49B8B5;
+    color: #49B8B5;
+}
+
+    .ip-button.ip-green:hover {
+        background: #49B8B5;
+        color: #fff;
+    }
+
+.ip-button.ip-white {
+    border: 1px solid #C3C5D2;
+    color: #C3C5D2;
+    position: relative;
+    top: -50px;
+    z-index: 1;
+}
+
+    .ip-button.ip-white:hover {
+        background: #C3C5D2;
+        color: #000;
+    }
+
+.innopath-popup .ip-sender {
+    font-size: 12px;
+    margin-bottom: -5px;
+    margin-top: 20px;
+    color: #35377B;
+}
+
+.innopath-popup .ip-message-txt {
+    color: #35377B;
+    padding: 5px 15px;
+    display: inline-block;
+    border: 1px solid #C3C5D2;
+    border-radius: 15px;
+    border-top-left-radius: 0;
+    font-size: 14px;
+    line-height: 24px;
+    margin-top: 10px;
+}
+
+    .innopath-popup .ip-message-txt a {
+        font-weight: bold;
+        color: #35377B;
+        text-decoration: underline;
+    }
+
+.innopath-popup .ip-message.ip-self {
+    text-align: right;
+}
+
+    .innopath-popup .ip-message.ip-self .ip-message-txt {
+        background: #353977;
+        color: #fff;
+        border-color: #353977;
+        border-top-right-radius: 0;
+        border-top-left-radius: 15px;
+    }
+
+.innopath-popup .ip-messages {
+    height: 450px;
+    overflow: auto;
+    padding-bottom: 20px;
+    padding-right: 20px;
+}
+
+    .innopath-popup .ip-messages img {
+        margin: 15px 0;
+        width: 100%;
+    }
+
+    .innopath-popup .ip-messages .ip-file {
+        display: block;
+        font-weight: normal;
+        text-decoration: none;
+        min-width: 230px;
+        background-image: url(img/download.svg);
+        background-repeat: no-repeat;
+        background-position: right center;
+    }
+
+        .innopath-popup .ip-messages .ip-file img {
+            margin: 0;
+            width: 40px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .innopath-popup .ip-messages .ip-file .ip-txt {
+            display: inline-block;
+            vertical-align: middle;
+            width: calc(100% - 55px);
+        }
+
+    .innopath-popup .ip-messages video {
+        margin: 15px 0;
+        width: 100%;
+    }

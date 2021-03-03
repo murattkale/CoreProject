@@ -1,38 +1,37 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace CMS
+namespace API
 {
     public class Startup
     {
-        private readonly IConfiguration Configuration;
-        private readonly IWebHostEnvironment HostEnvironment;
-
-        public Startup(IConfiguration configuration,
-            IWebHostEnvironment hostEnvironment)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            HostEnvironment = hostEnvironment;
         }
 
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -42,7 +41,7 @@ namespace CMS
             //add controller with views support
             var mvcBuilder = services.AddControllersWithViews();
 
-            //add newtonsoft json serializer
+            ////add newtonsoft json serializer
             mvcBuilder.AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
@@ -50,6 +49,7 @@ namespace CMS
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
+
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
@@ -59,8 +59,6 @@ namespace CMS
                 ContractResolver = new DefaultContractResolver()
             };
 
-            if (HostEnvironment.IsDevelopment())
-                mvcBuilder.AddRazorRuntimeCompilation();
 
             services.AddMvc(option => option.EnableEndpointRouting = false);
             services.AddDistributedMemoryCache();//To Store session in Memory, This is default implementation of IDistributedCache    
@@ -71,10 +69,6 @@ namespace CMS
 
             services.AddEntityFrameworkSqlServer().AddDbContext<myDBContext>(opt =>
             opt.UseSqlServer(Configuration.GetConnectionString("myDBContext"), b => b.MigrationsAssembly("myDBContext")));
-
-            //services.AddEntityFrameworkNpgsql().AddDbContext<CMSDBContext>(opt =>
-            //opt.UseNpgsql(Configuration.GetConnectionString("CMSDBContext"), b => b.MigrationsAssembly("CMSDBContext")));
-
 
             services.AddScoped(typeof(IBaseSession), typeof(BaseSession));
             services.AddScoped(typeof(IGenericRepo<IBaseModel>), typeof(GenericRepo<myDBContext, IBaseModel>));
@@ -91,44 +85,87 @@ namespace CMS
             });
 
 
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
 
-            services.AddKendo();
+            // Oluþturduðumuz gizli anahtarýmýzý byte dizisi olarak alýyoruz.
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
 
+            IdentityModelEventSource.ShowPII = true;
 
+            //Projede farklý authentication tipleri olabileceði için varsayýlan olarak JWT ile kontrol edeceðimizin bilgisini kaydediyoruz.
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                //JWT kullanacaðým ve ayarlarý da þunlar olsun dediðimiz yer ise burasýdýr.
+                .AddJwtBearer(x =>
+                {
+                    //Gelen isteklerin sadece HTTPS yani SSL sertifikasý olanlarý kabul etmesi(varsayýlan true)
+                    x.RequireHttpsMetadata = false;
+                    //Eðer token onaylanmýþ ise sunucu tarafýnda kayýt edilir.
+                    x.SaveToken = true;
+                    //Token içinde neleri kontrol edeceðimizin ayarlarý.
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        //Token 3.kýsým(imza) kontrolü
+                        ValidateIssuerSigningKey = true,
+                        //Neyle kontrol etmesi gerektigi
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        //Bu iki ayar ise "aud" ve "iss" claimlerini kontrol edelim mi diye soruyor
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "WIP API", Version = "v1" });
+            });
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IConfiguration config)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (HostEnvironment.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                //app.UseHsts();
-            }
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseCookiePolicy();
-            app.UseSession();
 
+            app.UseRouting();
+
+            //CORS için hangi ayarlarý kullanacaðýmýzý belirtiyoruz.
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+
+            app.UseSwagger();
+            //app.UseHsts();
+            //app.UseHttpsRedirection();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WIP API");
+            });
+
+
+            //Son olarak authentication kullanacaðýmýzý belirtiyoruz.
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseAuthenticationMiddleware();
-
             app.UseMiddleware<ErrorMid>();
 
-            //app.InitializeDatabase();
 
             SessionRequest.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
-
             var supportedCultures = new[] { new CultureInfo("en-EN") };
-
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-EN"),
@@ -136,11 +173,8 @@ namespace CMS
                 SupportedUICultures = supportedCultures
             });
 
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(name: "default", template: "{controller=" + SessionRequest.StartPage + "}/{action=" + SessionRequest.StartAction + "}/{Id?}");
-            });
         }
     }
 }
