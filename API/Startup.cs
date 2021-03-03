@@ -161,7 +161,7 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<ErrorMid>();
-
+            app.UseStaticFiles();
 
             SessionRequest.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 

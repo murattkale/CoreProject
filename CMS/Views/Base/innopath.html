@@ -542,105 +542,139 @@
                 </a>-->
             </div>
 
-            <div class="ip-content">
-                <div class="ip-item ip-messages ip-active">
-
-
-
-                </div>
-            </div>
-            <div class="ip-bottom">
-                <!--<a class="ip-button ip-answer">Biliyorum</a>
-                <a class="ip-button ip-answer">Bilmiyorum</a>
-                <a class="ip-button ip-answer">Bu konuda eğitim almak isterim</a>
-                <a class="ip-button ip-answer">Bu konudan muaf tutulmak isterim</a>-->
-            </div>
+            <div class="ip-content"><div class="ip-item ip-messages ip-active"></div></div><div class="ip-bottom"></div>
         </div>
     </div>
 
     <!--scripts-->
 
     <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="innopath/general.js"></script>
+
+    <script>
+        var apiUrl = 'https://localhost:44354/api';
+        //var apiUrl = 'http://wipapi.hybro.systems/api';
+        $(function () {
+
+            document.getElementsByClassName("innopath-button")[0].addEventListener("click", function () {
+                document.getElementsByClassName("innopath-popup")[0].classList.add("ip-active");
+            });
+
+
+            document.getElementsByClassName("ip-tint")[0].addEventListener("click", function () {
+                document.getElementsByClassName("innopath-popup")[0].classList.remove("ip-active");
+            });
+
+
+            document.getElementsByClassName("ip-cls")[0].addEventListener("click", function () {
+                document.getElementsByClassName("innopath-popup")[0].classList.remove("ip-active");
+            });
+
+            function errorSend(e, exception) {
+                var error = '';
+                if (e.status === 0) {
+                    error = 'Not connect. Verify Network.';
+                } else if (e.status === 404) {
+                    error = 'Requested page not found. [404]';
+                } else if (e.status === 500) {
+                    error = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    error = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    error = 'Time out error.';
+                } else if (exception === 'abort') {
+                    error = 'Ajax request aborted.';
+                } else {
+                    error = 'Uncaught Error. \n' + error.responseText;
+                }
+                var data = { error: error };
+
+                return error;
+            }
+
+
+            $.get(apiUrl + '/Section/GetAll?WorkshopId=1', function (result) {
+                var str = '';
+                $.each(result.Result, function (i, item) {
+                    str += '<a dataid="' + item.Id + '" class="ip-item ' + (i == 0 ? 'ip-active' : '') + '"><div class="ip-img" ><img src="innopath/img/step-icon.svg" alt=""></div>' + item.Name + '</a >';
+                    $('.innopath-popup .ip-sections').html(str);
+                });
+                GetFirst('');
+            })
+                .fail(function (e, exception) {
+                    if (error) {
+                        var errorResult = errorSend(e, exception);
+                        console.log(errorResult);
+                    }
+                });
+
+
+            function GetActionData(ResponseDataId) {
+
+                $.get(apiUrl + '/ActionData/GetActionData?ResponseDataId=' + ResponseDataId, function (result) {
+                    if (result.ResponseData == null) {
+                        alert('ResponseData Not Found'); return;
+                    }
+
+                    if (result.ResponseData) {
+                        $('.innopath-popup .ip-sections .ip-item.ip-active').removeClass('ip-active');
+                        $('.innopath-popup .ip-sections .ip-item[dataid="' + result.Content.SectionId + '"]').addClass('ip-active');
+
+                        $('.innopath-popup .ip-content')
+                            .append('<div class="ip-message ip-self"><div class="ip-sender">Sen</div><div class="ip-message-txt">' + result.ResponseData.ReponseContent + '</div></div>');
+
+                        $('.innopath-popup .ip-content')
+                            .append('<div class="ip-message"><div class="ip-sender">InnoPath</div><div class="ip-message-txt">' + result.Content.ContentData + '</div></div>');
+
+                        GetFirst(result.ContentID);
+                    }
+                })
+                    .fail(function (e, exception) {
+                        if (error) {
+                            var errorResult = errorSend(e, exception);
+                            console.log(errorResult);
+                        }
+                    });
+
+
+            }
+
+            function GetFirst(cid) {
+                if ($('.innopath-popup .ip-sections .ip-item.ip-active').length > 0) {
+                    var sectionid = $('.innopath-popup .ip-sections .ip-item.ip-active').attr('dataid');
+
+                    $.get(apiUrl + '/Content/GetFirst?ContentId=' + cid + '&SectionId=' + sectionid, function (result) {
+                        if (cid > 0) { }
+                        else {
+                            if (result)
+                                $('.innopath-popup .ip-content')
+                                    .append('<div class="ip-message"><div class="ip-sender">InnoPath</div><div class="ip-message-txt">' + result.ContentData + '</div></div>');
+                        }
+
+                        $('.innopath-popup .ip-bottom').html('');
+                        $.each(result.ResponseData, function (i, item2) {
+                            var strContent = '<a dataid="' + item2.Id + '"  class="ip-button ip-answer">' + item2.ReponseContent + '</a>';
+                            $('.innopath-popup .ip-bottom').append(strContent);
+                        });
+
+                        $('.innopath-popup .ip-button.ip-answer').click(function () {
+                            var ResponseDataId = $(this).attr('dataid');
+                            GetActionData(ResponseDataId);
+                        });
+                    })
+                        .fail(function (e, exception) {
+                            if (error) {
+                                var errorResult = errorSend(e, exception);
+                                console.log(errorResult);
+                            }
+                        });
+
+
+                }
+            }
+
+        });
+    </script>
 
 </body>
 </html>
 
-<script>
-    var apiUrl = 'https://localhost:44354/api';
-    //var apiUrl = 'http://wipapi.hybro.systems/api';
-    $(function () {
-
-        document.getElementsByClassName("innopath-button")[0].addEventListener("click", function () {
-            document.getElementsByClassName("innopath-popup")[0].classList.add("ip-active");
-        });
-
-
-        document.getElementsByClassName("ip-tint")[0].addEventListener("click", function () {
-            document.getElementsByClassName("innopath-popup")[0].classList.remove("ip-active");
-        });
-
-
-        document.getElementsByClassName("ip-cls")[0].addEventListener("click", function () {
-            document.getElementsByClassName("innopath-popup")[0].classList.remove("ip-active");
-        });
-
-
-        $.ajxGet(apiUrl + '/Section/GetAll?WorkshopId=1', function (result) {
-            var str = '';
-            $.each(result.Result, function (i, item) {
-                str += '<a dataid="' + item.Id + '" class="ip-item ' + (i == 0 ? 'ip-active' : '') + '"><div class="ip-img" ><img src="innopath/img/step-icon.svg" alt=""></div>' + item.Name + '</a >';
-                $('.innopath-popup .ip-sections').html(str);
-            });
-            getDatas('');
-        }, function () { });
-
-        function getRes(ResponseDataId) {
-            $.ajxGet(apiUrl + '/ActionData/GetActionData?ResponseDataId=' + ResponseDataId, function (result) {
-                if (result.ResponseData == null) {
-                    alert('ResponseData Not Found'); return;
-                }
-                if (result.ResponseData) {
-                    $('.innopath-popup .ip-sections .ip-item.ip-active').removeClass('ip-active');
-                    $('.innopath-popup .ip-sections .ip-item[dataid="' + result.Content.SectionId + '"]').addClass('ip-active');
-
-                    $('.innopath-popup .ip-content')
-                        .append('<div class="ip-message ip-self"><div class="ip-sender">Sen</div><div class="ip-message-txt">' + result.ResponseData.ReponseContent + '</div></div>');
-
-                    $('.innopath-popup .ip-content')
-                        .append('<div class="ip-message"><div class="ip-sender">InnoPath</div><div class="ip-message-txt">' + result.Content.ContentData + '</div></div>');
-
-                    getDatas(result.ContentID);
-                }
-
-
-            });
-        }
-
-        function getDatas(cid) {
-            if ($('.innopath-popup .ip-sections .ip-item.ip-active').length > 0) {
-                var sectionid = $('.innopath-popup .ip-sections .ip-item.ip-active').attr('dataid');
-                $.ajxGet(apiUrl + '/Content/GetFirst?ContentId=' + cid + '&SectionId=' + sectionid, function (result) {
-                    if (cid > 0) { }
-                    else {
-                        if (result)
-                            $('.innopath-popup .ip-content')
-                                .append('<div class="ip-message"><div class="ip-sender">InnoPath</div><div class="ip-message-txt">' + result.ContentData + '</div></div>');
-                    }
-
-                    $('.innopath-popup .ip-bottom').html('');
-                    $.each(result.ResponseData, function (i, item2) {
-                        var strContent = '<a dataid="' + item2.Id + '"  class="ip-button ip-answer">' + item2.ReponseContent + '</a>';
-                        $('.innopath-popup .ip-bottom').append(strContent);
-                    });
-
-                    $('.innopath-popup .ip-button.ip-answer').click(function () {
-                        var ResponseDataId = $(this).attr('dataid');
-                        getRes(ResponseDataId);
-                    });
-                });
-            }
-        }
-
-    });
-</script>

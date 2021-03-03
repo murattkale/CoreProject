@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <UserSecretsId>16041c71-062f-41bc-84df-4a259adaffe0</UserSecretsId>
     <!--<AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>-->
 
     <!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,6 +36,19 @@
   <ItemGroup>
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\img\bigger.svg" />
+    <None Include="wwwroot\img\book.svg" />
+    <None Include="wwwroot\img\cls.svg" />
+    <None Include="wwwroot\img\download.svg" />
+    <None Include="wwwroot\img\file.svg" />
+    <None Include="wwwroot\img\image.jpg" />
+    <None Include="wwwroot\img\intro.svg" />
+    <None Include="wwwroot\img\send.svg" />
+    <None Include="wwwroot\img\step-icon.svg" />
+    <None Include="wwwroot\img\step-icon2.svg" />
   </ItemGroup>
 
 
