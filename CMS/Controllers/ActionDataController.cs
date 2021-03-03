@@ -55,10 +55,41 @@ namespace CMS.Controllers
 
 
         [HttpPost]
-        public IActionResult GetPaging(DTParameters<ActionData> param, ActionData searchModel)
+        public IActionResult GetPaging(DTParameters<object> param, int ContentId)
         {
-            var result = _IActionDataService.GetPaging(null, true, param, false, o => o.Content);
-            return Json(result);
+            var rd = _IResponseDataService.Where(o => o.ContentId == ContentId, true, false, o => o.Content).Result.ToList();
+            var ad = _IActionDataService.Where(null, true, false, o => o.Content).Result.ToList();
+
+            var query = rd.Select(o => new
+            {
+                Id = o.Id,
+                ReponseContent = o.ReponseContent,
+                Content =
+                ad
+                .FirstOrDefault(oo => oo.ResponseDataId == o.Id)?.Content,
+                ActionDataId = ad
+                .FirstOrDefault(oo => oo.ResponseDataId == o.Id)?.Id
+
+            }).AsQueryable();
+
+            var GlobalSearchFilteredData = query.ToGlobalSearchInAllColumn<object>(param);
+            var IndividualColSearchFilteredData = GlobalSearchFilteredData.ToIndividualColumnSearch(param);
+            var SortedFilteredData = IndividualColSearchFilteredData.ToSorting(param);
+            var SortedData = SortedFilteredData.ToPagination(param);
+
+            var rSortedData = SortedData.ToList();
+
+            int Count = query.Count();
+
+            var resultData = new DTResult<object>
+            {
+                draw = param.Draw,
+                data = rSortedData,
+                recordsFiltered = Count,
+                recordsTotal = Count
+            };
+
+            return Json(resultData);
         }
         public IActionResult GetAll()
         {

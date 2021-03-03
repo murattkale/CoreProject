@@ -53,12 +53,7 @@ namespace CMS.Controllers
 
 
 
-        [HttpPost]
-        public IActionResult GetPaging(DTParameters<ResponseData> param, ResponseData searchModel)
-        {
-            var result = _IResponseDataService.GetPaging(null, true, param, false, o => o.Content);
-            return Json(result);
-        }
+        
         public IActionResult GetAll()
         {
             var result = _IResponseDataService.Where(null, true, false, o => o.Content);

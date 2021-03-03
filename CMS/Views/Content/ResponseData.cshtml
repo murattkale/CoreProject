@@ -62,19 +62,19 @@
 
             var table = $(dt_ResponseData).DataTable({
                 "ajax": {
-                    "url": '/' + controllerName_ResponseData + '/GetPaging',
+                    "url": '/' + 'ActionData' + '/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
                         $(dt_ResponseData).LoadingOverlay("show");
-                        searchModel.selectid = selectid_ResponseData;
+                        searchModel.ContentId = selectid_ResponseData;
                     },
                     "dataSrc": function (json) {
                         return_data = new Array();
                         var data = json.data;
 
                         $.each(data, function (i, row) {
-                            var detail = '<a class="btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_ResponseData + '/InsertOrUpdatePage?id=' + row.Id + '&' + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
+                            var detail = '<a class="mymodal btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_ResponseData + '/InsertOrUpdatePage?id=' + row.Id + '&' + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
                             return_data.push({
                                 'Id': row.Id,
                                 'ReponseContent': row.ReponseContent,

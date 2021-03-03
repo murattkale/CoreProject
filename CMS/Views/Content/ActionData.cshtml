@@ -1,4 +1,5 @@
 ﻿@{
+    var contentid_ResponseData = Context.Request.Query["id"].ToInt();
     var selectid_ResponseData = Context.Request.Query["selectid"].ToInt();
     var controllerName_ResponseData = "ResponseData";
     var titleName_ResponseData = "ResponseData";
@@ -47,11 +48,10 @@
 
 <script>
     var SectionData = [];
+    var ContentData = [];
 
     $(function () {
-        function GetSection() { $.ajx('/Section/GetSelect', null, function (resultData) { SectionData = resultData; getGrid(); }); }
-        GetSection();
-
+        function GetSection() { $.ajx('/Section/GetSelect', null, function (resultData) { SectionData = resultData; getGrid(); }); } GetSection();
 
 
         function getGrid() {
@@ -69,22 +69,20 @@
 
             var table = $(dt_ResponseData).DataTable({
                 "ajax": {
-                    "url": '/' + controllerName_ResponseData + '/GetPaging',
+                    "url": '/' + 'ActionData' + '/GetPaging',
                     "type": "POST",
                     "datatype": "json",
                     "data": function (searchModel) {
                         $(dt_ResponseData).LoadingOverlay("show");
-                        searchModel.selectid = selectid_ResponseData;
+                        searchModel.ContentId = selectid_ResponseData;
                     },
                     "dataSrc": function (json) {
                         return_data = new Array();
                         var data = json.data;
-
                         $.each(data, function (i, row) {
-                            var detail = '<a class="mymodal btn btn-sm btn-clean btn-icon btn-icon-md" href="/' + controllerName_ResponseData + '/InsertOrUpdatePage?id=' + row.Id + '&' + 'selectid=' + row.Id + '" title="Edit"><i class="la la-edit"></i></a>';
-
-                            var Section = '<select dataid="' + row.Id + '" name="dp_Section_' + row.Id + '" id="dp_Section_' + row.Id + '" class="dp_section form-control form-control-solid form-control-lg"></select>';
-                            var Content = '<select dataid="' + row.Id + '" name="dp_Content_' + row.Id + '" id="dp_Content_' + row.Id + '" class="dp_content form-control form-control-solid form-control-lg"></select>';
+                            var detail = '<a dataid="' + row.ActionDataId + '" save="' + row.Id + '" class="btnsave btn btn-sm btn-clean btn-icon btn-icon-md" href="#" title="Save"><i class="la la-save"></i></a>';
+                            var Section = '<select sectionid="' + row.Content?.SectionId + '" dataid="' + row.Id + '" name="dp_Section_' + row.Id + '" id="dp_Section_' + row.Id + '" class="dp_section form-control form-control-solid form-control-lg"></select>';
+                            var Content = '<select contentid="' + row.Content?.Id + '" dataid="' + row.Id + '" name="dp_Content_' + row.Id + '" id="dp_Content_' + row.Id + '" class="dp_content form-control form-control-solid form-control-lg"></select>';
 
                             return_data.push({
                                 'Id': row.Id,
@@ -104,10 +102,41 @@
 
                     $('.dp_section').addOption(SectionData, 'value', 'text', null, null, 0, null, 'Section Seçiniz');
 
+                    $.each($('.dp_section'), function (i, item) {
+                        var sectionid = $(item).attr('sectionid');
+                        var id = $(item).attr('dataid');
+                        var contentid = $('#dp_Content_' + id).attr('contentid');
+                        $('#dp_Content_' + id).addOptionAjax('/Content/GetSelectId', { SectionId: sectionid }, 'value', 'text', null, null, contentid, null, 'Content Seçiniz');
+                    });
+
                     $('.dp_section').change(function () {
                         var id = $(this).attr('dataid');
                         $('#dp_Content_' + id).addOptionAjax('/Content/GetSelectId', { SectionId: $(this).val() }, 'value', 'text', null, null, 0, null, 'Content Seçiniz');
                     });
+
+                    $('.btnsave').click(function () {
+                        var Id = $(this).attr('dataid');
+                        var ResponseDataId = $(this).attr('save');
+                        var ContentID = $('#dp_Content_' + ResponseDataId).val();
+                        var postModel = { Id: Id, ResponseDataId: ResponseDataId, ContentID: ContentID }
+                        if (postModel.ContentID < 1) {
+                            alerts('Lütfen Content Seçiniz!');
+                            return;
+                        }
+                        $.LoadingOverlay("show");
+                        $.ajx("/" + 'ActionData/InsertOrUpdate', { postModel: postModel }, function (resultData) {
+                            if (resultData.RType == 1) {
+                                table.ajax.reload();
+                            }
+                            else {
+                                alerts(resultData.Message);
+                            }
+                            $.LoadingOverlay("hide");
+                        }, function () { location.reload(); });
+
+
+                    });
+
 
 
                     $(dt_ResponseData).LoadingOverlay("hide");

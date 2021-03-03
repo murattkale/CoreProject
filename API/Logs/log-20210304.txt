@@ -1,0 +1,252 @@
+2021-03-04 00:40:46.255 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Section/GetAll?WorkshopId=1 - -
+2021-03-04 00:40:46.291 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:40:46.294 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.SectionController.GetAll (API)"'
+2021-03-04 00:40:46.295 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetAll\", controller = \"Section\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetAll(Int32)" on controller "API.Controllers.SectionController" ("API").
+2021-03-04 00:40:46.301 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:40:46.303 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"RModel`1[[Section, Services, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2021-03-04 00:40:46.747 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("200"ms) [Parameters=["@__WorkshopId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [s].[Id], [s].[CreaDate], [s].[CreaUser], [s].[Definition], [s].[IsActive], [s].[IsDeleted], [s].[IsState], [s].[IsStatus], [s].[ModDate], [s].[ModUser], [s].[Name], [s].[OrderNo], [s].[WorkshopId], [t].[Id], [t].[CategoryType], [t].[CreaDate], [t].[CreaUser], [t].[Definition], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[Name], [t].[OrderNo], [t].[PublishDate], [t].[PublishDuration], [t0].[Id], [t0].[ContentData], [t0].[CreaDate], [t0].[CreaUser], [t0].[DocVideoDesc], [t0].[DocumentType], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ResponseType], [t0].[SectionId], [t0].[VideoLink]
+FROM [Section] AS [s]
+INNER JOIN (
+    SELECT [w].[Id], [w].[CategoryType], [w].[CreaDate], [w].[CreaUser], [w].[Definition], [w].[IsActive], [w].[IsDeleted], [w].[IsState], [w].[IsStatus], [w].[ModDate], [w].[ModUser], [w].[Name], [w].[OrderNo], [w].[PublishDate], [w].[PublishDuration]
+    FROM [Workshop] AS [w]
+    WHERE [w].[IsDeleted] IS NULL
+) AS [t] ON [s].[WorkshopId] = [t].[Id]
+LEFT JOIN (
+    SELECT [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL
+) AS [t0] ON [s].[Id] = [t0].[SectionId]
+WHERE [s].[IsDeleted] IS NULL AND ([s].[WorkshopId] = @__WorkshopId_0)
+ORDER BY [s].[Id], [t].[Id], [t0].[Id]"
+2021-03-04 00:40:46.749 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.SectionController.GetAll (API)" in 453.5081ms
+2021-03-04 00:40:46.749 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.SectionController.GetAll (API)"'
+2021-03-04 00:40:46.749 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Section/GetAll?WorkshopId=1 - - - 200 11094 application/json;+charset=utf-8 497.9849ms
+2021-03-04 00:40:46.757 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=&SectionId=1 - -
+2021-03-04 00:40:46.757 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:40:46.757 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:40:46.757 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetFirst\", controller = \"Content\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetFirst(System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])" on controller "API.Controllers.ContentController" ("API").
+2021-03-04 00:40:46.758 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:40:47.180 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("125"ms) [Parameters=["@__SectionId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL AND ([c].[SectionId] = @__SectionId_0)
+    ORDER BY [c].[OrderNo]
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [t].[Id] = [t0].[ContentId]
+ORDER BY [t].[OrderNo], [t].[Id], [t0].[Id]"
+2021-03-04 00:40:47.181 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"Content"'.
+2021-03-04 00:40:47.181 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ContentController.GetFirst (API)" in 423.5574ms
+2021-03-04 00:40:47.181 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:40:47.182 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=&SectionId=1 - - - 200 1899 application/json;+charset=utf-8 424.4954ms
+2021-03-04 00:41:32.199 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/ActionData/GetActionData?ResponseDataId=1 - -
+2021-03-04 00:41:32.199 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:41:32.199 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ActionDataController.GetActionData (API)"'
+2021-03-04 00:41:32.199 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetActionData\", controller = \"ActionData\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetActionData(Int32)" on controller "API.Controllers.ActionDataController" ("API").
+2021-03-04 00:41:32.200 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:41:32.309 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("109"ms) [Parameters=["@__ResponseDataId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[ActionType], [a].[ContentID], [a].[CreaDate], [a].[CreaUser], [a].[IsActive], [a].[IsDeleted], [a].[IsState], [a].[IsStatus], [a].[ModDate], [a].[ModUser], [a].[OrderNo], [a].[ResponseDataId], [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM [ActionData] AS [a]
+INNER JOIN (
+    SELECT [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL
+) AS [t] ON [a].[ContentID] = [t].[Id]
+INNER JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [a].[ResponseDataId] = [t0].[Id]
+WHERE [a].[IsDeleted] IS NULL AND ([a].[ResponseDataId] = @__ResponseDataId_0)
+ORDER BY [a].[OrderNo]"
+2021-03-04 00:41:32.310 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"ActionData"'.
+2021-03-04 00:41:32.310 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ActionDataController.GetActionData (API)" in 110.9398ms
+2021-03-04 00:41:32.310 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ActionDataController.GetActionData (API)"'
+2021-03-04 00:41:32.310 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/ActionData/GetActionData?ResponseDataId=1 - - - 200 1178 application/json;+charset=utf-8 111.6546ms
+2021-03-04 00:41:32.319 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=3&SectionId=1 - -
+2021-03-04 00:41:32.319 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:41:32.319 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:41:32.319 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetFirst\", controller = \"Content\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetFirst(System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])" on controller "API.Controllers.ContentController" ("API").
+2021-03-04 00:41:32.320 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:41:32.414 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("93"ms) [Parameters=["@__ContentId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL AND ([c].[Id] = @__ContentId_0)
+    ORDER BY [c].[OrderNo]
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [t].[Id] = [t0].[ContentId]
+ORDER BY [t].[OrderNo], [t].[Id], [t0].[Id]"
+2021-03-04 00:41:32.414 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"Content"'.
+2021-03-04 00:41:32.414 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ContentController.GetFirst (API)" in 94.9174ms
+2021-03-04 00:41:32.414 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:41:32.414 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=3&SectionId=1 - - - 200 1186 application/json;+charset=utf-8 95.4635ms
+2021-03-04 00:41:34.317 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/ActionData/GetActionData?ResponseDataId=9 - -
+2021-03-04 00:41:34.317 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:41:34.317 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ActionDataController.GetActionData (API)"'
+2021-03-04 00:41:34.317 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetActionData\", controller = \"ActionData\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetActionData(Int32)" on controller "API.Controllers.ActionDataController" ("API").
+2021-03-04 00:41:34.317 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:41:34.415 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("98"ms) [Parameters=["@__ResponseDataId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[ActionType], [a].[ContentID], [a].[CreaDate], [a].[CreaUser], [a].[IsActive], [a].[IsDeleted], [a].[IsState], [a].[IsStatus], [a].[ModDate], [a].[ModUser], [a].[OrderNo], [a].[ResponseDataId], [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM [ActionData] AS [a]
+INNER JOIN (
+    SELECT [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL
+) AS [t] ON [a].[ContentID] = [t].[Id]
+INNER JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [a].[ResponseDataId] = [t0].[Id]
+WHERE [a].[IsDeleted] IS NULL AND ([a].[ResponseDataId] = @__ResponseDataId_0)
+ORDER BY [a].[OrderNo]"
+2021-03-04 00:41:34.416 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"ActionData"'.
+2021-03-04 00:41:34.416 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ActionDataController.GetActionData (API)" in 99.126ms
+2021-03-04 00:41:34.416 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ActionDataController.GetActionData (API)"'
+2021-03-04 00:41:34.416 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/ActionData/GetActionData?ResponseDataId=9 - - - 200 1161 application/json;+charset=utf-8 99.7682ms
+2021-03-04 00:41:34.430 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=7&SectionId=2 - -
+2021-03-04 00:41:34.431 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:41:34.431 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:41:34.431 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetFirst\", controller = \"Content\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetFirst(System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])" on controller "API.Controllers.ContentController" ("API").
+2021-03-04 00:41:34.432 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:41:34.499 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("65"ms) [Parameters=["@__ContentId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL AND ([c].[Id] = @__ContentId_0)
+    ORDER BY [c].[OrderNo]
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [t].[Id] = [t0].[ContentId]
+ORDER BY [t].[OrderNo], [t].[Id], [t0].[Id]"
+2021-03-04 00:41:34.499 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"Content"'.
+2021-03-04 00:41:34.499 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ContentController.GetFirst (API)" in 67.7285ms
+2021-03-04 00:41:34.499 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:41:34.499 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=7&SectionId=2 - - - 200 825 application/json;+charset=utf-8 69.1296ms
+2021-03-04 00:41:36.072 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/ActionData/GetActionData?ResponseDataId=14 - -
+2021-03-04 00:41:36.073 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:41:36.073 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ActionDataController.GetActionData (API)"'
+2021-03-04 00:41:36.073 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetActionData\", controller = \"ActionData\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetActionData(Int32)" on controller "API.Controllers.ActionDataController" ("API").
+2021-03-04 00:41:36.074 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:41:36.188 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("113"ms) [Parameters=["@__ResponseDataId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[ActionType], [a].[ContentID], [a].[CreaDate], [a].[CreaUser], [a].[IsActive], [a].[IsDeleted], [a].[IsState], [a].[IsStatus], [a].[ModDate], [a].[ModUser], [a].[OrderNo], [a].[ResponseDataId], [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM [ActionData] AS [a]
+INNER JOIN (
+    SELECT [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL
+) AS [t] ON [a].[ContentID] = [t].[Id]
+INNER JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [a].[ResponseDataId] = [t0].[Id]
+WHERE [a].[IsDeleted] IS NULL AND ([a].[ResponseDataId] = @__ResponseDataId_0)
+ORDER BY [a].[OrderNo]"
+2021-03-04 00:41:36.189 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"ActionData"'.
+2021-03-04 00:41:36.189 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ActionDataController.GetActionData (API)" in 115.8494ms
+2021-03-04 00:41:36.189 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ActionDataController.GetActionData (API)"'
+2021-03-04 00:41:36.189 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/ActionData/GetActionData?ResponseDataId=14 - - - 200 1180 application/json;+charset=utf-8 116.8754ms
+2021-03-04 00:41:36.199 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=6&SectionId=2 - -
+2021-03-04 00:41:36.199 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 00:41:36.199 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:41:36.199 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetFirst\", controller = \"Content\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetFirst(System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])" on controller "API.Controllers.ContentController" ("API").
+2021-03-04 00:41:36.201 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 00:41:36.293 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("90"ms) [Parameters=["@__ContentId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL AND ([c].[Id] = @__ContentId_0)
+    ORDER BY [c].[OrderNo]
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [t].[Id] = [t0].[ContentId]
+ORDER BY [t].[OrderNo], [t].[Id], [t0].[Id]"
+2021-03-04 00:41:36.293 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"Content"'.
+2021-03-04 00:41:36.293 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ContentController.GetFirst (API)" in 94.2741ms
+2021-03-04 00:41:36.293 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 00:41:36.294 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=6&SectionId=2 - - - 200 465 application/json;+charset=utf-8 95.0189ms
+2021-03-04 01:26:43.178 +03:00 [Information] [Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager] [{ Id: 63, Name: "UsingProfileAsKeyRepositoryWithDPAPI" }] User profile is available. Using '"C:\Users\pro\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-03-04 01:26:43.655 +03:00 [Information] [Microsoft.Hosting.Lifetime] [] Now listening on: "http://127.0.0.1:23670"
+2021-03-04 01:26:43.656 +03:00 [Information] [Microsoft.Hosting.Lifetime] [] Application started. Press Ctrl+C to shut down.
+2021-03-04 01:26:43.656 +03:00 [Information] [Microsoft.Hosting.Lifetime] [] Hosting environment: "Development"
+2021-03-04 01:26:43.656 +03:00 [Information] [Microsoft.Hosting.Lifetime] [] Content root path: "D:\github\CoreProject\API"
+2021-03-04 01:26:43.821 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Section/GetAll?WorkshopId=1 - -
+2021-03-04 01:26:43.821 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/img/book.svg - -
+2021-03-04 01:26:43.821 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/img/bigger.svg - -
+2021-03-04 01:26:43.821 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/img/cls.svg - -
+2021-03-04 01:26:43.856 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 01:26:44.025 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.SectionController.GetAll (API)"'
+2021-03-04 01:26:44.029 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/img/bigger.svg - - - 404 0 - 209.8485ms
+2021-03-04 01:26:44.029 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/img/book.svg - - - 404 0 - 209.8210ms
+2021-03-04 01:26:44.029 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/img/cls.svg - - - 404 0 - 209.8210ms
+2021-03-04 01:26:44.057 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetAll\", controller = \"Section\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetAll(Int32)" on controller "API.Controllers.SectionController" ("API").
+2021-03-04 01:26:44.109 +03:00 [Warning] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10410, Name: "Microsoft.EntityFrameworkCore.Infrastructure.RedundantAddServicesCallWarning" }] 'AddEntityFramework*' was called on the service provider, but 'UseInternalServiceProvider' wasn't called in the DbContext options configuration. Consider removing the 'AddEntityFramework*' call, as in most cases it's not needed and may cause conflicts with other products and services registered in the same service provider.
+2021-03-04 01:26:44.808 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 01:26:44.819 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"RModel`1[[Section, Services, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2021-03-04 01:26:48.669 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("1,208"ms) [Parameters=["@__WorkshopId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [s].[Id], [s].[CreaDate], [s].[CreaUser], [s].[Definition], [s].[IsActive], [s].[IsDeleted], [s].[IsState], [s].[IsStatus], [s].[ModDate], [s].[ModUser], [s].[Name], [s].[OrderNo], [s].[WorkshopId], [t].[Id], [t].[CategoryType], [t].[CreaDate], [t].[CreaUser], [t].[Definition], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[Name], [t].[OrderNo], [t].[PublishDate], [t].[PublishDuration], [t0].[Id], [t0].[ContentData], [t0].[CreaDate], [t0].[CreaUser], [t0].[DocVideoDesc], [t0].[DocumentType], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ResponseType], [t0].[SectionId], [t0].[VideoLink]
+FROM [Section] AS [s]
+INNER JOIN (
+    SELECT [w].[Id], [w].[CategoryType], [w].[CreaDate], [w].[CreaUser], [w].[Definition], [w].[IsActive], [w].[IsDeleted], [w].[IsState], [w].[IsStatus], [w].[ModDate], [w].[ModUser], [w].[Name], [w].[OrderNo], [w].[PublishDate], [w].[PublishDuration]
+    FROM [Workshop] AS [w]
+    WHERE [w].[IsDeleted] IS NULL
+) AS [t] ON [s].[WorkshopId] = [t].[Id]
+LEFT JOIN (
+    SELECT [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL
+) AS [t0] ON [s].[Id] = [t0].[SectionId]
+WHERE [s].[IsDeleted] IS NULL AND ([s].[WorkshopId] = @__WorkshopId_0)
+ORDER BY [s].[Id], [t].[Id], [t0].[Id]"
+2021-03-04 01:26:48.812 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.SectionController.GetAll (API)" in 4749.5366ms
+2021-03-04 01:26:48.812 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.SectionController.GetAll (API)"'
+2021-03-04 01:26:48.815 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Section/GetAll?WorkshopId=1 - - - 200 11094 application/json;+charset=utf-8 4996.4513ms
+2021-03-04 01:26:48.820 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=&SectionId=1 - -
+2021-03-04 01:26:48.820 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 GET http://localhost:44354/api/img/step-icon.svg - -
+2021-03-04 01:26:48.823 +03:00 [Information] [Microsoft.AspNetCore.Cors.Infrastructure.CorsService] [{ Id: 4, Name: "PolicySuccess" }] CORS policy execution successful.
+2021-03-04 01:26:48.826 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Name: "ExecutingEndpoint" }] Executing endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 01:26:48.826 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/img/step-icon.svg - - - 404 0 - 6.2684ms
+2021-03-04 01:26:48.828 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 3, Name: "ControllerActionExecuting" }] Route matched with "{action = \"GetFirst\", controller = \"Content\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult GetFirst(System.Nullable`1[System.Int32], System.Nullable`1[System.Int32])" on controller "API.Controllers.ContentController" ("API").
+2021-03-04 01:26:48.853 +03:00 [Information] [Microsoft.EntityFrameworkCore.Infrastructure] [{ Id: 10403, Name: "Microsoft.EntityFrameworkCore.Infrastructure.ContextInitialized" }] Entity Framework Core "5.0.2" initialized '"myDBContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=myDBContext "
+2021-03-04 01:26:49.434 +03:00 [Information] [Microsoft.EntityFrameworkCore.Database.Command] [{ Id: 20101, Name: "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted" }] Executed DbCommand ("565"ms) [Parameters=["@__SectionId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[Id], [t].[ContentData], [t].[CreaDate], [t].[CreaUser], [t].[DocVideoDesc], [t].[DocumentType], [t].[IsActive], [t].[IsDeleted], [t].[IsState], [t].[IsStatus], [t].[ModDate], [t].[ModUser], [t].[OrderNo], [t].[ResponseType], [t].[SectionId], [t].[VideoLink], [t0].[Id], [t0].[ContentId], [t0].[CreaDate], [t0].[CreaUser], [t0].[IsActive], [t0].[IsDeleted], [t0].[IsState], [t0].[IsStatus], [t0].[ModDate], [t0].[ModUser], [t0].[OrderNo], [t0].[ReponseContent]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[ContentData], [c].[CreaDate], [c].[CreaUser], [c].[DocVideoDesc], [c].[DocumentType], [c].[IsActive], [c].[IsDeleted], [c].[IsState], [c].[IsStatus], [c].[ModDate], [c].[ModUser], [c].[OrderNo], [c].[ResponseType], [c].[SectionId], [c].[VideoLink]
+    FROM [Content] AS [c]
+    WHERE [c].[IsDeleted] IS NULL AND ([c].[SectionId] = @__SectionId_0)
+    ORDER BY [c].[OrderNo]
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[Id], [r].[ContentId], [r].[CreaDate], [r].[CreaUser], [r].[IsActive], [r].[IsDeleted], [r].[IsState], [r].[IsStatus], [r].[ModDate], [r].[ModUser], [r].[OrderNo], [r].[ReponseContent]
+    FROM [ResponseData] AS [r]
+    WHERE [r].[IsDeleted] IS NULL
+) AS [t0] ON [t].[Id] = [t0].[ContentId]
+ORDER BY [t].[OrderNo], [t].[Id], [t0].[Id]"
+2021-03-04 01:26:49.437 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor] [{ Id: 1, Name: "ObjectResultExecuting" }] Executing "OkObjectResult", writing value of type '"Content"'.
+2021-03-04 01:26:49.446 +03:00 [Information] [Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker] [{ Id: 2, Name: "ActionExecuted" }] Executed action "API.Controllers.ContentController.GetFirst (API)" in 617.0743ms
+2021-03-04 01:26:49.446 +03:00 [Information] [Microsoft.AspNetCore.Routing.EndpointMiddleware] [{ Id: 1, Name: "ExecutedEndpoint" }] Executed endpoint '"API.Controllers.ContentController.GetFirst (API)"'
+2021-03-04 01:26:49.446 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 GET http://localhost:44354/api/Content/GetFirst?ContentId=&SectionId=1 - - - 200 1899 application/json;+charset=utf-8 625.8923ms
+2021-03-04 01:27:41.444 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1, Name: "RequestStarting" }] Request starting HTTP/1.1 POST http://127.0.0.1:23670/iisintegration - 0
+2021-03-04 01:27:41.444 +03:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2, Name: "RequestFinished" }] Request finished HTTP/1.1 POST http://127.0.0.1:23670/iisintegration - 0 - 202 0 - 0.5488ms
+2021-03-04 01:27:41.445 +03:00 [Information] [Microsoft.Hosting.Lifetime] [] Application is shutting down...

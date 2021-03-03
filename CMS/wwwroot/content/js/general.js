@@ -455,67 +455,78 @@ function alerts(message, button, call) {
     };
 
     $.fn.addOption = function (selectValues, value, text, dpChange, dpSuccess, selectValue, selectText, selectDefault, attrName) {
-        var id = this;
-        $(id).html('');
-
-        if (selectDefault) {
-            var optionsAll = $("<option></option>")
-                .attr("value", '')
-                .text(selectDefault);
-            $(id).append(optionsAll);
-        }
-
-        $.each(selectValues, function (i, item) {
-
-            var splitText = text.split(',');
-            var textValue = "";
-            for (var ii = 0; ii < splitText.length; ii++)
-                textValue += item[splitText[ii]] + (ii >= 0 ? ' ' : '');
-
-            var ustkategori = "";
-            try {
-                ustkategori = item.Parent.text + ' / ';
-            } catch (e) {
-
+       
+        var thisid = $(this);
+        $.each(thisid, function (i, id) {
+            $(id).html('');
+            if (selectDefault) {
+                var optionsAll = $("<option></option>")
+                    .attr("value", '')
+                    .text(selectDefault);
+                $(id).append(optionsAll);
             }
 
-            var optionsAll = $("<option></option>")
-                .attr("value", item[value])
-                .text(ustkategori + textValue);
+            $.each(selectValues, function (i, item) {
 
-            if (attrName)
-                $(optionsAll)
-                    .attr(attrName, item[attrName]);
+                var splitText = text.split(',');
+                var textValue = "";
+                for (var ii = 0; ii < splitText.length; ii++)
+                    textValue += item[splitText[ii]] + (ii >= 0 ? ' ' : '');
 
-            if (selectValue != null && value != '' && value != undefined && selectValue.toString() == item[value].toString()) {
-                $(optionsAll).attr('selected', "selected");
+                var ustkategori = "";
+                try {
+                    ustkategori = item.Parent.text + ' / ';
+                } catch (e) {
+
+                }
+
+                var optionsAll = $("<option></option>")
+                    .attr("value", item[value])
+                    .text(ustkategori + textValue);
+
+                if (attrName)
+                    $(optionsAll)
+                        .attr(attrName, item[attrName]);
+
+
+                if (selectValue != null && value != '' && value != undefined && selectValue.toString() == item[value].toString()) {
+                    $(optionsAll).attr('selected', "selected");
+                }
+                if (selectText != null && text != '' && text != undefined && selectText == item[text]) {
+                    $(optionsAll).attr('selected', "selected");
+                }
+
+                var sectionid = toInt($(id).attr('sectionid'));
+                if (sectionid > 0 && sectionid == item.value) {
+                    $(optionsAll).attr('selected', "selected");
+                }
+
+                //var contentid = $(id).attr('contentid');
+                //if (contentid > 0 && contentid == item.value) {
+                //    $(optionsAll).attr('selected', "selected");
+                //}
+
+
+                $(id).append(optionsAll);
+
+            });
+
+            if (dpChange != null) {
+                $(document).on('change', id, function (e) { dpChange(e.target); });
             }
-            if (selectText != null && text != '' && text != undefined && selectText == item[text]) {
-                $(optionsAll).attr('selected', "selected");
+            if (dpSuccess != null) {
+                dpSuccess(id);
+                //$(document).on('', id, function (e) { dpSuccess(e.target); });
             }
-
-
-
-            $(id).append(optionsAll);
-
-        });
-
-
-
-        if (dpChange != null) {
-            $(document).on('change', id, function (e) { dpChange(e.target); });
-        }
-
-        if (dpSuccess != null) {
-            dpSuccess(id);
-            //$(document).on('', id, function (e) { dpSuccess(e.target); });
-        }
-
         //try {
         //    $(id).select2({});
         //} catch (e) {
         //    console.log(e);
         //}
+
+        });
+
+        
 
     };
 

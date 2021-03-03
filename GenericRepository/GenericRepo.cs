@@ -66,7 +66,36 @@ public class GenericRepo<C, T> : IGenericRepo<T> where T : class, IBaseModel whe
         };
 
         return resultData;
+    }
 
+    public DTResult2<T> GetPaging2(
+       Expression<Func<T, bool>> filter = null
+      , bool AsNoTracking = true
+      , DTParameters<T> param = null
+      , bool IsDeletedShow = false
+      , params Expression<Func<T, object>>[] includes
+      )
+    {
+        var query = Where(filter, AsNoTracking, IsDeletedShow, includes).Result;
+
+        var GlobalSearchFilteredData = query.ToGlobalSearchInAllColumn<T>(param);
+        var IndividualColSearchFilteredData = GlobalSearchFilteredData.ToIndividualColumnSearch(param);
+        var SortedFilteredData = IndividualColSearchFilteredData.ToSorting(param);
+        var SortedData = SortedFilteredData.ToPagination(param);
+
+        var rSortedData = SortedData.ToList();
+
+        int Count = query.Count();
+
+        var resultData = new DTResult2<T>
+        {
+            draw = param.Draw,
+            data = rSortedData,
+            recordsFiltered = Count,
+            recordsTotal = Count
+        };
+
+        return resultData;
     }
 
     public RModel<T> Where(

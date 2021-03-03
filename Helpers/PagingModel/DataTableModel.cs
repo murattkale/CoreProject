@@ -62,8 +62,7 @@ public class DTResult2<T>
     /// Note that this parameter's name can be changed using the ajaxDT option's dataSrc property.
     /// </summary>
     //public List<T> data { get; set; }
-    //public List<T> data { get; set; }
-    public object data { get; set; }
+    public dynamic data { get; set; }
 
     //Customized Field..Pls Ignore
     public string LastModifiedOn { get; set; }
