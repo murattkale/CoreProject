@@ -26,6 +26,8 @@ public partial class myDBContext : DbContext
     public virtual DbSet<ResponseData> ResponseData { get; set; }
     public virtual DbSet<Documents> Documents { get; set; }
     public virtual DbSet<ActionData> ActionData { get; set; }
+    public virtual DbSet<WorkshopSession> WorkshopSession { get; set; }
+
 
 
 

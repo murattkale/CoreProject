@@ -9,6 +9,7 @@ public partial class Workshop : BaseModel
     public Workshop()
     {
         Section = new HashSet<Section>();
+        WorkshopSession = new HashSet<WorkshopSession>();
     }
 
     [Required]
@@ -22,5 +23,6 @@ public partial class Workshop : BaseModel
 
 
     public virtual ICollection<Section> Section { get; set; }
+    public virtual ICollection<WorkshopSession> WorkshopSession { get; set; }
 }
 

@@ -10,6 +10,8 @@ public partial class Section : BaseModel
     {
         Content = new HashSet<Content>();
         UserClientSession = new HashSet<UserClientSession>();
+        WorkshopSession = new HashSet<WorkshopSession>();
+
     }
 
     [Required]
@@ -23,6 +25,7 @@ public partial class Section : BaseModel
 
     public virtual ICollection<Content> Content { get; set; }
     public virtual ICollection<UserClientSession> UserClientSession { get; set; }
+    public virtual ICollection<WorkshopSession> WorkshopSession { get; set; }
 
 
 }

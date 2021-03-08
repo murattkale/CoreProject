@@ -10,6 +10,7 @@ public partial class User : BaseModel
 {
     public User()
     {
+        WorkshopSession = new HashSet<WorkshopSession>();
     }
 
 
@@ -23,5 +24,6 @@ public partial class User : BaseModel
     public int? LoginCount { get; set; }
 
 
+    public virtual ICollection<WorkshopSession> WorkshopSession { get; set; }
 }
 
