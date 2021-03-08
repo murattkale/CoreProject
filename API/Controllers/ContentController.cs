@@ -32,7 +32,7 @@ namespace API.Controllers
         [HttpGet("GetFirst")]
         public IActionResult GetFirst(int? ContentId, int? SectionId)
         {
-            var result = _IContentService.Where(o => (ContentId > 0 ? o.Id == ContentId : o.SectionId == SectionId), true, false, o => o.ResponseData).Result
+            var result = _IContentService.Where(o => (ContentId > 0 ? o.Id == ContentId : o.SectionId == SectionId), true, false, o => o.ResponseData, o => o.Documents).Result
                 .OrderBy(o => o.OrderNo).FirstOrDefault();
             return Ok(result);
         }

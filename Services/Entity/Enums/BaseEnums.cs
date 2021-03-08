@@ -29,10 +29,14 @@ public enum ResponseType : int
 
 public enum DocumentType : int
 {
-    [Description("DocumentType1")]
-    DocumentType1 = 1,
-    [Description("DocumentType2")]
-    DocumentType2 = 2,
+    [Description("Text")]
+    Text = 1,
+    [Description("Image")]
+    Image = 2,
+    [Description("Video")]
+    Video = 3,
+    [Description("Pdf")]
+    Pdf = 4,
 }
 
 public enum CategoryType : int

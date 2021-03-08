@@ -32,7 +32,7 @@ namespace API.Controllers
         [HttpGet("GetActionData")]
         public IActionResult GetActionData(int ResponseDataId)
         {
-            var result = _IActionDataService.Where(o => o.ResponseDataId == ResponseDataId, true, false, o => o.Content, o => o.ResponseData).Result
+            var result = _IActionDataService.Where(o => o.ResponseDataId == ResponseDataId, true, false, o => o.Content, o => o.ResponseData, o => o.Content.Documents).Result
                 .OrderBy(o => o.OrderNo).FirstOrDefault();
             return Ok(result);
         }
